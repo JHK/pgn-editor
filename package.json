@@ -1,0 +1,6 @@
+{
+  "name": "pgn-editor",
+  "dependencies": {
+    "chessground": "^8.1.7"
+  }
+}
