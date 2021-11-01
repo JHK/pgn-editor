@@ -16,16 +16,16 @@ boardHtml.appendChild(boardInnerHtml);
 
 document.body.appendChild(boardHtml);
 
-const config = {};
-const ground = Chessground(boardInnerHtml, config);
-
+const cg = Chessground(boardInnerHtml, {});
 const chess = new Chess();
 
 function onMove(orig: Key, dest: Key, metadata: MoveMetadata) {
-  // FIXME: en-passant removes a piece
-  chess.move({from: orig, to: dest});
+  // console.log(`I got the move from ${orig} to ${dest} (%O})`, metadata)
+
+  const move = chess.move({ from: orig, to: dest });
+  cg.set({ fen: chess.fen() })
+
   console.log(chess.ascii());
-  return false;
 };
 
-ground.set({ movable: { events: { after: onMove } } });
+cg.set({ movable: { events: { after: onMove } } });
