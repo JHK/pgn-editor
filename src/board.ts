@@ -9,9 +9,16 @@ export class Board {
   private engine: ChessEngine
 
   constructor(element: HTMLElement) {
-    this.cg = Chessground(element, {})
+    this.cg = Chessground(element, {
+      movable: {
+        free: false,
+        events: { after: this.onMove() }
+      },
+      draggable: {
+        showGhost: true,
+      }
+    })
     this.engine = new ChessEngine()
-    this.cg.set({ movable: { events: { after: this.onMove() } } })
     this.updateChessGround()
   }
 
