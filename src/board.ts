@@ -1,28 +1,52 @@
 import { Chessground } from 'chessground';
 import { Api } from 'chessground/api';
-import { Key } from 'chessground/types';
+import { Color, Key } from 'chessground/types';
 import { ChessInstance, Square } from 'chess.js';
 const Chess = require('chess.js');
 
 export class Board {
-  cg: Api
-  chess: ChessInstance
+  private cg: Api
+  private chess: ChessInstance
 
   constructor(element: HTMLElement) {
     this.cg = Chessground(element, {})
     this.chess = new Chess()
-    this.cg.set({ movable: { events: { after: this.onMove(this) } } })
+    this.cg.set({ movable: { events: { after: this.onMove() } } })
+    this.updateChessGround()
   }
 
-  // see https://github.com/ornicar/chessground-examples/blob/54d28e177b2294e042169c8ddb5602a743361b5b/src/util.ts#L18
-  private onMove(self: Board) {
+  private onMove() {
     return (orig: Key, dest: Key) => {
       console.log(`I got the move from ${orig} to ${dest}`)
 
-      self.chess.move({ from: (orig as Square), to: (dest as Square) })
-      self.cg.set({ fen: self.chess.fen() })
+      this.chess.move({ from: (orig as Square), to: (dest as Square) })
+      this.updateChessGround()
 
-      console.log(self.chess.ascii())
+      console.log(this.chess.ascii())
     }
+  }
+
+  private updateChessGround() {
+    this.cg.set({
+      turnColor: this.toColor(),
+      movable: {
+        color: this.toColor(),
+        dests: this.toDests(),
+      },
+      fen: this.chess.fen(),
+    })
+  }
+
+  private toColor(): Color {
+    return (this.chess.turn() == 'w') ? 'white' : 'black'
+  }
+
+  private toDests(): Map<Key, Key[]> {
+    const dests = new Map();
+    this.chess.SQUARES.forEach(s => {
+      const ms = this.chess.moves({ square: s, verbose: true });
+      if (ms.length) dests.set(s, ms.map(m => m.to));
+    });
+    return dests;
   }
 }
