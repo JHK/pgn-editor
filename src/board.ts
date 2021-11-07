@@ -5,21 +5,24 @@ import { ChessInstance, Square } from 'chess.js';
 const Chess = require('chess.js');
 
 export class Board {
+  cg: Api
+  chess: ChessInstance
+
   constructor(element: HTMLElement) {
-    const cg = Chessground(element, {})
-    const engine = new Chess()
-    cg.set({ movable: { events: { after: this.onMove(cg, engine) } } })
+    this.cg = Chessground(element, {})
+    this.chess = new Chess()
+    this.cg.set({ movable: { events: { after: this.onMove(this) } } })
   }
 
   // see https://github.com/ornicar/chessground-examples/blob/54d28e177b2294e042169c8ddb5602a743361b5b/src/util.ts#L18
-  private onMove(cg: Api, engine: ChessInstance) {
+  private onMove(self: Board) {
     return (orig: Key, dest: Key) => {
       console.log(`I got the move from ${orig} to ${dest}`)
 
-      engine.move({ from: (orig as Square), to: (dest as Square) })
-      cg.set({ fen: engine.fen() })
+      self.chess.move({ from: (orig as Square), to: (dest as Square) })
+      self.cg.set({ fen: self.chess.fen() })
 
-      console.log(engine.ascii())
+      console.log(self.chess.ascii())
     }
   }
 }
