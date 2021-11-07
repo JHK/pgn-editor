@@ -6,11 +6,11 @@ const Chess = require('chess.js');
 
 export class Board {
   private cg: Api
-  private chess: ChessInstance
+  private engine: ChessEngine
 
   constructor(element: HTMLElement) {
     this.cg = Chessground(element, {})
-    this.chess = new Chess()
+    this.engine = new ChessEngine()
     this.cg.set({ movable: { events: { after: this.onMove() } } })
     this.updateChessGround()
   }
@@ -19,29 +19,49 @@ export class Board {
     return (orig: Key, dest: Key) => {
       console.log(`I got the move from ${orig} to ${dest}`)
 
-      this.chess.move({ from: (orig as Square), to: (dest as Square) })
+      this.engine.move(orig, dest)
       this.updateChessGround()
-
-      console.log(this.chess.ascii())
+      this.engine.log()
     }
   }
 
   private updateChessGround() {
     this.cg.set({
-      turnColor: this.toColor(),
+      turnColor: this.engine.color(),
       movable: {
-        color: this.toColor(),
-        dests: this.toDests(),
+        color: this.engine.color(),
+        dests: this.engine.dests(),
       },
-      fen: this.chess.fen(),
+      fen: this.engine.fen(),
     })
   }
+}
 
-  private toColor(): Color {
+// wrapper of chess.js for compatibility with chessground
+class ChessEngine {
+  private chess: ChessInstance
+
+  constructor() {
+    this.chess = new Chess()
+  }
+
+  move(from: Key, to: Key): void {
+    this.chess.move({ from: (from as Square), to: (to as Square) })
+  }
+
+  fen(): string {
+    return this.chess.fen()
+  }
+
+  log(): void {
+    console.log(this.chess.ascii())
+  }
+
+  color(): Color {
     return (this.chess.turn() == 'w') ? 'white' : 'black'
   }
 
-  private toDests(): Map<Key, Key[]> {
+  dests(): Map<Key, Key[]> {
     const dests = new Map();
     this.chess.SQUARES.forEach(s => {
       const ms = this.chess.moves({ square: s, verbose: true });
