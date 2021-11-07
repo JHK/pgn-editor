@@ -11,4 +11,9 @@ document.body.appendChild(boardHtml);
 const boardInnerHtml = document.createElement('div');
 boardInnerHtml.classList.add('cg-wrap');
 boardHtml.appendChild(boardInnerHtml);
-new Board(boardInnerHtml);
+const board = new Board(boardInnerHtml);
+
+const undoButton = document.createElement('button')
+undoButton.innerHTML = 'Undo'
+undoButton.onclick = function () { board.undo() }
+document.body.appendChild(undoButton)

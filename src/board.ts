@@ -22,6 +22,11 @@ export class Board {
     this.updateChessGround()
   }
 
+  undo(): void {
+    this.engine.undo()
+    this.updateChessGround()
+  }
+
   private onMove() {
     return (orig: Key, dest: Key) => {
       console.log(`I got the move from ${orig} to ${dest}`)
@@ -50,6 +55,10 @@ class ChessEngine {
 
   constructor() {
     this.chess = new Chess()
+  }
+
+  undo(): void {
+    this.chess.undo()
   }
 
   move(from: Key, to: Key): void {
