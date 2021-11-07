@@ -8,6 +8,8 @@ export class Board {
   private cg: Api
   private engine: ChessEngine
 
+  afterPgnUpdate: (pgn: string) => any
+
   constructor(element: HTMLElement) {
     this.cg = Chessground(element, {
       movable: {
@@ -20,11 +22,17 @@ export class Board {
     })
     this.engine = new ChessEngine()
     this.updateChessGround()
+    this.afterPgnUpdate = () => { }
   }
 
   undo(): void {
     this.engine.undo()
+    this.updateUI()
+  }
+
+  updateUI() {
     this.updateChessGround()
+    this.afterPgnUpdate(this.engine.pgn())
   }
 
   private onMove() {
@@ -32,7 +40,7 @@ export class Board {
       console.log(`I got the move from ${orig} to ${dest}`)
 
       this.engine.move(orig, dest)
-      this.updateChessGround()
+      this.updateUI()
       this.engine.log()
     }
   }
@@ -67,6 +75,10 @@ class ChessEngine {
 
   fen(): string {
     return this.chess.fen()
+  }
+
+  pgn(): string {
+    return this.chess.pgn()
   }
 
   log(): void {

@@ -17,3 +17,10 @@ const undoButton = document.createElement('button')
 undoButton.innerHTML = 'Undo'
 undoButton.onclick = function () { board.undo() }
 document.body.appendChild(undoButton)
+
+const pgnField = document.createElement('textarea');
+pgnField.contentEditable = 'false'
+board.afterPgnUpdate = function (pgn: string) {
+  pgnField.value = pgn
+}
+document.body.appendChild(pgnField)
