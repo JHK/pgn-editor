@@ -14,4 +14,5 @@ undoButton.onclick = function () { board.undo() }
 const pgnArea = document.getElementById('pgn') as HTMLTextAreaElement
 board.afterPgnUpdate = function (pgn: string) {
   pgnArea.value = pgn
+  pgnArea.scrollTop = pgnArea.scrollHeight
 }
