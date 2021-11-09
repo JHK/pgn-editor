@@ -14,6 +14,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'PGN Editor',
+      template: 'src/index.html',
     }),
   ],
   module: {

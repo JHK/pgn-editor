@@ -1,26 +1,17 @@
 import * as _ from 'lodash';
 import '../assets/chessground.css';
 import '../assets/theme.css';
+import '../assets/index.css';
+import '../assets/layout.css';
 import { Board } from './board';
 
-const boardHtml = document.createElement('div');
-boardHtml.classList.add('blue');
-boardHtml.classList.add('merida');
-document.body.appendChild(boardHtml);
+const boardElement = document.getElementById('board')
+const board = new Board(boardElement);
 
-const boardInnerHtml = document.createElement('div');
-boardInnerHtml.classList.add('cg-wrap');
-boardHtml.appendChild(boardInnerHtml);
-const board = new Board(boardInnerHtml);
-
-const undoButton = document.createElement('button')
-undoButton.innerHTML = 'Undo'
+const undoButton = document.getElementById('undo')
 undoButton.onclick = function () { board.undo() }
-document.body.appendChild(undoButton)
 
-const pgnField = document.createElement('textarea');
-pgnField.contentEditable = 'false'
+const pgnArea = document.getElementById('pgn') as HTMLTextAreaElement
 board.afterPgnUpdate = function (pgn: string) {
-  pgnField.value = pgn
+  pgnArea.value = pgn
 }
-document.body.appendChild(pgnField)
