@@ -1,0 +1,60 @@
+
+// @import '../node_modules/breakpoint-sass/stylesheets/breakpoint';
+
+body {
+  width: 90%;
+  max-width: 900px;
+  margin: 2em auto;
+}
+
+.page {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  // grid-template-rows: min-content;
+  grid-auto-rows: min-content;
+  grid-template-areas:
+    'header header'
+    'board tools'
+    'board controls'
+    'under under'
+    'footer footer';
+  grid-gap: 20px;
+
+  > header {
+    grid-area: header;
+    text-align: center;
+    border-bottom: 1px solid #999;
+    padding: 10px;
+  }
+
+  > board {
+    grid-area: board;
+  }
+
+  > tools {
+    grid-area: tools;
+    border: 1px solid #999;
+    border-radius: 5px;
+    padding: 10px;
+  }
+
+  > controls {
+    grid-area: controls;
+    border: 1px solid #999;
+    border-radius: 5px;
+    padding: 10px;
+    height: fit-content;
+  }
+
+  > under {
+    grid-area: under;
+    padding: 10px;
+  }
+
+  > footer {
+    grid-area: footer;
+    text-align: center;
+    border-top: 1px solid #999;
+    padding: 10px;
+  }
+}

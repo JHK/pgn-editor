@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
+import '../assets/layout.scss';
 import '../assets/chessground.css';
 import '../assets/theme.css';
 import '../assets/index.css';
-import '../assets/layout.css';
 import { Board } from './board';
 
 const boardElement = document.getElementById('board')

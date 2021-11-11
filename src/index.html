@@ -9,22 +9,26 @@
 </head>
 
 <body>
-  <div class="container">
+  <div class="page">
     <header><%= htmlWebpackPlugin.options.title %></header>
 
     <board>
       <div class="blue merida">
-        <div class="cg-wrap" id="board"></div>
+        <div class="cg-wrap" id="board" style="width: 600px; height: 600px;"></div>
       </div>
     </board>
+
+    <tools>
+      tools
+    </tools>
 
     <controls>
       <button id="undo">Undo</button>
     </controls>
 
-    <output>
+    <under>
       <textarea id="pgn" readonly=true></textarea>
-    </output>
+    </under>
 
     <footer>
       <a href="https://github.com/JHK/pgn-editor/issues" target="_blank">
