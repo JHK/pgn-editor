@@ -27,7 +27,41 @@
     </controls>
 
     <under>
-      <textarea id="pgn" readonly=true></textarea>
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <textarea id="pgn" readonly=true class="flip-card-front"></textarea>
+          <div class="flip-card-back">
+            <form>
+              <label for="event">Event</label>
+              <input type="text" id="event" name="event"><br>
+
+              <label for="site">Site</label>
+              <input type="text" id="site" name="site"><br>
+
+              <label for="white">White</label>
+              <input type="text" id="name_white" name="name_white">
+              <input type="text" id="rating_white" name="rating_white"><br>
+
+              <label for="black">Black</label>
+              <input type="text" id="name_black" name="name_black">
+              <input type="text" id="rating_black" name="rating_black"><br>
+
+              <label for="date">Date</label>
+              <input type="date" id="date" name="date"><br>
+
+              <label for="round">Round</label>
+              <input type="text" id="round" name="round"><br>
+
+              <label for="result">Result</label>
+              <select id="result" name="result">
+                <option value="white_wins">White</option>
+                <option value="draw">Draw</option>
+                <option value="black_wins">Black</option>
+              </select>
+            </form>
+          </div>
+        </div>
+      </div>
     </under>
 
     <footer>

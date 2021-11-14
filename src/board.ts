@@ -30,8 +30,13 @@ export class Board {
     this.updateUI()
   }
 
-  updateUI() {
+  updateUI(): void {
     this.updateChessGround()
+    this.afterPgnUpdate(this.engine.pgn())
+  }
+
+  header(key: string, value: string): void {
+    this.engine.header(key, value)
     this.afterPgnUpdate(this.engine.pgn())
   }
 
@@ -79,6 +84,10 @@ class ChessEngine {
 
   pgn(): string {
     return this.chess.pgn()
+  }
+
+  header(key: string, value: string): void {
+    this.chess.header(key, value)
   }
 
   log(): void {
