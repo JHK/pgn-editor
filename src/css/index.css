@@ -31,10 +31,23 @@ textarea {
 }
 
 .flip-card-back {
-  text-align: center;
   transform: rotateY(180deg);
 }
 
 form input {
-  margin: 5px;
+  margin-bottom: 10px;
+}
+
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 50%;
+}
+
+label {
+  width: 50px;
+  padding-right: 10px;
+  display: inline-block;
 }

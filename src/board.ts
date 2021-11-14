@@ -8,6 +8,7 @@ export class Board {
   private cg: Api
   private engine: ChessEngine
 
+  // http://www.chessclub.com/help/PGN-spec
   afterPgnUpdate: (pgn: string) => any
 
   constructor(element: HTMLElement) {
