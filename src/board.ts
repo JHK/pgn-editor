@@ -22,8 +22,8 @@ export class Board {
       }
     })
     this.engine = new ChessEngine()
-    this.updateChessGround()
     this.afterPgnUpdate = () => { }
+    this.updateUI()
   }
 
   undo(): void {
