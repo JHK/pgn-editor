@@ -8,13 +8,20 @@ import { Board } from './board';
 const boardElement = document.getElementById('board')
 const board = new Board(boardElement);
 
-const undoButton = document.getElementById('undo')
+const undoButton = document.getElementById('undo') as HTMLButtonElement
 undoButton.onclick = function () { board.undo() }
 
 const pgnArea = document.getElementById('pgn') as HTMLTextAreaElement
 board.afterPgnUpdate = function (pgn: string) {
   pgnArea.value = pgn
   pgnArea.scrollTop = pgnArea.scrollHeight
+}
+
+const copyButton = document.getElementById('copy') as HTMLButtonElement
+copyButton.onclick = function () {
+  navigator.clipboard.writeText(pgnArea.value).then(function() {
+    // TODO: visual feedback
+  })
 }
 
 const eventInput = document.getElementById('event') as HTMLInputElement
