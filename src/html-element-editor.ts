@@ -56,8 +56,8 @@ abstract class HTMLEditor {
 }
 
 export class HTMLTextElementEditor extends HTMLEditor {
-  private afterEditFn: (newValue: string) => any
-  private afterResetFn: () => any
+  protected afterEditFn: (newValue: string) => any
+  protected afterResetFn: () => any
 
   constructor(element: HTMLElement) {
     super(element)
@@ -77,7 +77,7 @@ export class HTMLTextElementEditor extends HTMLEditor {
 
   getValue() { return this.inputElement().value }
 
-  private inputElement() { return <HTMLInputElement>(this.edit) }
+  protected inputElement() { return <HTMLInputElement>(this.edit) }
 
   protected isEmpty() { return isBlank(this.getValue()) }
 
@@ -105,6 +105,28 @@ export class HTMLDateElementEditor extends HTMLTextElementEditor {
     return edit
   }
 
+}
+
+export class HTMLTextWithPrefixElementEditor extends HTMLTextElementEditor {
+
+  private prefix: string
+
+  constructor(prefix: string, element: HTMLElement) {
+    super(element)
+    this.prefix = prefix
+  }
+
+  getValue() { return this.prefix + this.inputElement().value }
+
+  protected isEmpty() { return isBlank(this.inputElement().value) }
+
+  protected afterEditHook() {
+    if (this.isEmpty()) {
+      this.afterResetFn()
+    } else {
+      this.afterEditFn(this.inputElement().value)
+    }
+  }
 }
 
 function isBlank(str: string) {

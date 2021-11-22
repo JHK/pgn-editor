@@ -4,7 +4,7 @@ import './css/chessground.css';
 import './css/theme.css';
 import './css/index.css';
 import { Board } from './board';
-import { HTMLTextElementEditor, HTMLDateElementEditor } from './html-element-editor';
+import { HTMLTextElementEditor, HTMLDateElementEditor, HTMLTextWithPrefixElementEditor } from './html-element-editor';
 
 const boardElement = document.getElementById('board')
 const board = new Board(boardElement);
@@ -43,10 +43,9 @@ new HTMLTextElementEditor(document.getElementById('site') as HTMLSpanElement).
   afterEdit((value) => { board.header("Site", value) }).
   afterReset(() => { board.header("Site", "") })
 
-new HTMLTextElementEditor(document.getElementById('round') as HTMLSpanElement).
+new HTMLTextWithPrefixElementEditor("Round ", document.getElementById('round') as HTMLSpanElement).
   afterEdit((value) => { board.header("Round", value) }).
   afterReset(() => { board.header("Round", "") })
-// TODO: prefix
 
 new HTMLDateElementEditor(document.getElementById('date') as HTMLSpanElement).
   afterEdit((value) => { board.header("Date", value) }).
