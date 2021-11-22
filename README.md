@@ -12,17 +12,19 @@ Chess editor to easily create PGN files.
 
 ## Usage
 
-Install dependencies
-```bash
-npm install
+Create a docker image
+
+```
+docker build -t npm-editor .
 ```
 
-Build bundle
-```bash
-npm run build -- --mode production
+Run the docker image
+
+```
+docker run -p 8080:80 npm-editor:latest
 ```
 
-Open `./dist/index.html` in a browser.
+Open http://localhost:8080/
 
 ## License
 
