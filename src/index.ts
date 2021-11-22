@@ -4,6 +4,7 @@ import './css/chessground.css';
 import './css/theme.css';
 import './css/index.css';
 import { Board } from './board';
+import { HTMLTextElementEditor } from './html-text-element-editor';
 
 const boardElement = document.getElementById('board')
 const board = new Board(boardElement);
@@ -24,42 +25,32 @@ copyButton.onclick = function () {
   })
 }
 
-const eventInput = document.getElementById('event') as HTMLInputElement
-eventInput.addEventListener('keyup', function () {
-  board.header("Event", eventInput.value)
-})
+new HTMLTextElementEditor(document.getElementById('white') as HTMLSpanElement).
+  afterEdit((value) => { board.header("White", value) }).
+  afterReset(() => { board.header("White", "") })
+// TODO: rating
 
-const siteInput = document.getElementById('site') as HTMLInputElement
-siteInput.addEventListener('keyup', function () {
-  board.header("Site", siteInput.value)
-})
+new HTMLTextElementEditor(document.getElementById('black') as HTMLSpanElement).
+  afterEdit((value) => { board.header("Black", value) }).
+  afterReset(() => { board.header("Black", "") })
+// TODO: rating
 
-const dateInput = document.getElementById('date') as HTMLInputElement
-dateInput.addEventListener('change', function () {
-  board.header("Date", dateInput.value)
-})
+new HTMLTextElementEditor(document.getElementById('event') as HTMLSpanElement).
+  afterEdit((value) => { board.header("Event", value) }).
+  afterReset(() => { board.header("Event", "") })
 
-const roundInput = document.getElementById('round') as HTMLInputElement
-roundInput.addEventListener('keyup', function () {
-  board.header("Round", roundInput.value)
-})
+new HTMLTextElementEditor(document.getElementById('site') as HTMLSpanElement).
+  afterEdit((value) => { board.header("Site", value) }).
+  afterReset(() => { board.header("Site", "") })
 
-const whiteNameInput = document.getElementById('name_white') as HTMLInputElement
-whiteNameInput.addEventListener('keyup', function () {
-  board.header("White", whiteNameInput.value)
-})
+new HTMLTextElementEditor(document.getElementById('round') as HTMLSpanElement).
+  afterEdit((value) => { board.header("Round", value) }).
+  afterReset(() => { board.header("Round", "") })
+// TODO: prefix
 
-const whiteRatingInput = document.getElementById('rating_white') as HTMLInputElement
-whiteRatingInput.addEventListener('keyup', function () {
-  board.header("WhiteELO", whiteRatingInput.value)
-})
+new HTMLTextElementEditor(document.getElementById('date') as HTMLSpanElement).
+  afterEdit((value) => { board.header("Date", value) }).
+  afterReset(() => { board.header("Date", "") })
+// TODO: date picker
 
-const blackNameInput = document.getElementById('name_black') as HTMLInputElement
-blackNameInput.addEventListener('keyup', function () {
-  board.header("Black", blackNameInput.value)
-})
-
-const blackRatingInput = document.getElementById('rating_black') as HTMLInputElement
-blackRatingInput.addEventListener('keyup', function () {
-  board.header("BlackELO", blackRatingInput.value)
-})
+// TODO: result

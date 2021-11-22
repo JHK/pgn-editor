@@ -10,7 +10,13 @@
 
 <body>
   <div class="page">
-    <header><%= htmlWebpackPlugin.options.title %></header>
+    <header>
+        <h2>
+          <span id="white" class="editable-text placeholder">White</span>
+          <span style="font-size: .75em;">vs.</span>
+          <span id="black" class="editable-text placeholder">Black</span>
+        </h2>
+    </header>
 
     <board>
       <div class="blue merida">
@@ -18,57 +24,20 @@
       </div>
     </board>
 
-    <tools>
-      TODO: list moves
-    </tools>
-
     <controls>
       <button id="undo">Undo</button>
       <button id="copy">Copy PGN</button>
     </controls>
 
     <under>
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <textarea id="pgn" readonly=true class="flip-card-front"></textarea>
-          <div class="flip-card-back">
-            <form>
-              <div class="row">
-                <div class="column">
-                  <label for="event">Event</label>
-                  <input type="text" id="event" name="event"><br>
-
-                  <label for="site">Site</label>
-                  <input type="text" id="site" name="site"><br>
-
-                  <label for="date">Date</label>
-                  <input type="date" id="date" name="date"><br>
-
-                  <label for="round">Round</label>
-                  <input type="text" id="round" name="round"><br>
-                </div>
-                <div class="column">
-                  <label for="white">White</label>
-                  <input type="text" id="name_white" name="name_white" placeholder="Name">
-                  <input type="text" id="rating_white" name="rating_white" placeholder="Rating" size="4"><br>
-
-                  <label for="black">Black</label>
-                  <input type="text" id="name_black" name="name_black" placeholder="Name">
-                  <input type="text" id="rating_black" name="rating_black" placeholder="Rating" size="4"><br>
-
-                  <label for="result">Result</label>
-                  <select id="result" name="result">
-                    <option value="1-0">White wins</option>
-                    <option value="1/2-1/2">Draw</option>
-                    <option value="black_wins">Black wins</option>
-                    <option value="*">Other</option>
-                  </select>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
+      <div class="metadata">
+        <span id="event" class="editable-text placeholder">Event</span>,
+        <span id="site" class="editable-text placeholder">Site</span>,
+        <span id="round" class="editable-text placeholder">Round</span>,
+        <span id="date" class="editable-text placeholder">Date</span>,
+        <span id="result" class="editable-text placeholder">Result</span>
       </div>
+      <textarea id="pgn" readonly=true></textarea>
     </under>
 
     <footer>
