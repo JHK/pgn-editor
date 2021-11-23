@@ -14,6 +14,7 @@ abstract class HTMLEditor {
 
     // TODO: allow input filter: https://jsfiddle.net/emkey08/zgvtjc51
     this.edit = this.setupEditElement(editElementArgs)
+    this.edit.setHint(this.placeholderValue)
     this.edit.element().addEventListener('focusout', this.internalAfterEdit())
     this.edit.element().addEventListener('keypress', (e) => {
       if (e.key === 'Enter') { this.internalAfterEdit()() }
