@@ -66,7 +66,7 @@ interface HTMLEditorEditElement {
 }
 
 class HTMLEditorInputEditElement implements HTMLEditorEditElement {
-  private inputElement = <HTMLInputElement>document.createElement('input')
+  private inputElement = <HTMLInputElement> document.createElement('input')
 
   element(): HTMLInputElement {
     return this.inputElement
@@ -109,6 +109,49 @@ class HTMLEditorInputWithPrefixEditElement extends HTMLEditorInputEditElement {
   }
 }
 
+class HTMLEditorResultEditElement implements HTMLEditorEditElement {
+  private selectElement = <HTMLSelectElement> document.createElement('select')
+
+  constructor() {
+    const white = document.createElement('option')
+    white.text = "1-0"
+    white.value = "1-0"
+    const draw = document.createElement('option')
+    draw.text = "Draw"
+    draw.value = "1/2-1/2"
+    const black = document.createElement('option')
+    black.text = "0-1"
+    black.value = "0-1"
+    const other = document.createElement('option')
+    other.text = "Other"
+    other.value = ""
+    other.selected = true
+
+    this.selectElement.add(white)
+    this.selectElement.add(draw)
+    this.selectElement.add(black)
+    this.selectElement.add(other)
+  }
+
+  element(): HTMLElement {
+    return this.selectElement
+  }
+
+  setHint(hint: string) {}
+
+  isEmpty(): boolean {
+    return this.selectElement.selectedOptions[0].text == "Other"
+  }
+
+  getDisplayValue(): string {
+    return this.selectElement.selectedOptions[0].text
+  }
+
+  getCallbackValue() {
+    return this.selectElement.selectedOptions[0].value
+  }
+}
+
 export class HTMLTextElementEditor extends HTMLEditor {
   protected setupEditElement() {
     return new HTMLEditorInputEditElement()
@@ -128,6 +171,12 @@ export class HTMLTextWithPrefixElementEditor extends HTMLEditor {
 
   protected setupEditElement(prefix: string) {
     return new HTMLEditorInputWithPrefixEditElement(prefix)
+  }
+}
+
+export class HTMLResultElementEditor extends HTMLEditor {
+  protected setupEditElement(prefix: string) {
+    return new HTMLEditorResultEditElement()
   }
 }
 
