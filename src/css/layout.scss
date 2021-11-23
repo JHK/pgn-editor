@@ -2,16 +2,13 @@
 // @import '../node_modules/breakpoint-sass/stylesheets/breakpoint';
 
 body {
-  width: 90%;
   max-width: 900px;
   margin: 2em auto;
 }
 
 .page {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  // grid-template-rows: min-content;
-  grid-auto-rows: min-content;
+  grid-template-columns: repeat(2, auto);
   grid-template-areas:
     'header header'
     'board controls'
@@ -31,10 +28,7 @@ body {
 
   > controls {
     grid-area: controls;
-    border: 1px solid #999;
-    border-radius: 5px;
-    padding: 10px;
-    height: fit-content;
+    width: min-content;
   }
 
   > under {

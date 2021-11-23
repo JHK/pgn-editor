@@ -47,3 +47,8 @@ new HTMLDateElementEditor(document.getElementById('date') as HTMLSpanElement).
 
 new HTMLResultElementEditor(document.getElementById('result') as HTMLSpanElement).
   afterEdit((value) => { editor.header("Result", value) })
+
+while (boardElement.clientWidth != boardElement.parentElement.clientWidth) {
+  boardElement.style.width = boardElement.parentElement.clientWidth + "px"
+  boardElement.style.height = boardElement.clientWidth + "px"
+}
