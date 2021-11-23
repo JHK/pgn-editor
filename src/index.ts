@@ -26,29 +26,23 @@ copyButton.onclick = function () {
 }
 
 new HTMLTextElementEditor(document.getElementById('white') as HTMLSpanElement).
-  afterEdit((value) => { board.header("White", value) }).
-  afterReset(() => { board.header("White", "") })
+  afterEdit((value) => { board.header("White", value) })
 // TODO: rating
 
 new HTMLTextElementEditor(document.getElementById('black') as HTMLSpanElement).
-  afterEdit((value) => { board.header("Black", value) }).
-  afterReset(() => { board.header("Black", "") })
+  afterEdit((value) => { board.header("Black", value) })
 // TODO: rating
 
 new HTMLTextElementEditor(document.getElementById('event') as HTMLSpanElement).
-  afterEdit((value) => { board.header("Event", value) }).
-  afterReset(() => { board.header("Event", "") })
+  afterEdit((value) => { board.header("Event", value) })
 
 new HTMLTextElementEditor(document.getElementById('site') as HTMLSpanElement).
-  afterEdit((value) => { board.header("Site", value) }).
-  afterReset(() => { board.header("Site", "") })
+  afterEdit((value) => { board.header("Site", value) })
 
 new HTMLTextWithPrefixElementEditor("Round ", document.getElementById('round') as HTMLSpanElement).
-  afterEdit((value) => { board.header("Round", value) }).
-  afterReset(() => { board.header("Round", "") })
+  afterEdit((value) => { board.header("Round", value) })
 
 new HTMLDateElementEditor(document.getElementById('date') as HTMLSpanElement).
-  afterEdit((value) => { board.header("Date", value) }).
-  afterReset(() => { board.header("Date", "") })
+  afterEdit((value) => { board.header("Date", value) })
 
 // TODO: result
