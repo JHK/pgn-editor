@@ -2,16 +2,18 @@
 
 textarea {
   resize: none;
-  border: 0px;
-  /* TODO: full width */
+  border: none;
+  width: 100%;
+  height: 12em;
 }
 
 .metadata {
+  margin: 10px;
   text-align: center;
 }
 
 .editable-text {
-  padding: 5px;
+  padding: 10px;
 }
 
 .placeholder {
