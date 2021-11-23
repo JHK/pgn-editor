@@ -1,6 +1,9 @@
+@import url("../../node_modules/@fortawesome/fontawesome-free/css/regular.min.css");
+
 textarea {
   resize: none;
   border: 0px;
+  /* TODO: full width */
 }
 
 .metadata {
@@ -8,14 +11,36 @@ textarea {
 }
 
 .editable-text {
-  /* TODO: visual hint for this to be editable */
-  /* font-style: italic; */
+  padding: 5px;
 }
 
 .placeholder {
-  color: red;
+  font-style: italic;
+  color: #999;
+}
+
+.placeholder::after {
+  margin-left: 0.25em;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  font-size: smaller;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f044";
+}
+
+controls {
+  text-align: center;
 }
 
 controls button {
-  margin: 10px 0 0 10px;
+  margin: 10px 0 10px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #e7e7e7;
+  color: black;
+  font-size: x-large;
+  text-align: center;
+  padding: 16px 16px;
 }

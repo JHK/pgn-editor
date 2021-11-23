@@ -3,6 +3,10 @@ import './css/layout.scss';
 import './css/chessground.css';
 import './css/theme.css';
 import './css/index.css';
+
+import '@fortawesome/fontawesome-free/js/fontawesome'
+import '@fortawesome/fontawesome-free/js/solid'
+
 import { PGNEditor } from './pgn-editor';
 import { HTMLTextElementEditor, HTMLDateElementEditor, HTMLTextWithPrefixElementEditor, HTMLResultElementEditor } from './html-element-editor';
 
