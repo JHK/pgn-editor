@@ -1,6 +1,6 @@
 abstract class HTMLEditor {
-  protected span: HTMLElement
-  protected edit: HTMLElement
+  private span: HTMLElement
+  private edit: HTMLElement
 
   protected placeholderValue: string
 
@@ -22,11 +22,10 @@ abstract class HTMLEditor {
     element.parentNode.insertBefore(this.edit, element)
   }
 
-  abstract getValue(): string
-
   protected abstract setupEditElement(): HTMLElement
-  protected abstract afterEditHook(): any
-  protected abstract isEmpty(): boolean
+  protected abstract afterEditHook(edit: HTMLElement): any
+  protected abstract isEmpty(edit: HTMLElement): boolean
+  protected abstract getValue(edit: HTMLElement): string
 
   private internalOnEdit() {
     return () => {
@@ -41,16 +40,16 @@ abstract class HTMLEditor {
       this.span.hidden = false
       this.edit.hidden = true
 
-      if (this.isEmpty()) {
+      if (this.isEmpty(this.edit)) {
         this.span.textContent = this.placeholderValue
         if (!this.span.classList.contains('placeholder'))
           this.span.classList.add('placeholder')
       } else {
-        this.span.textContent = this.getValue()
+        this.span.textContent = this.getValue(this.edit)
         this.span.classList.remove('placeholder')
       }
 
-      this.afterEditHook()
+      this.afterEditHook(this.edit)
     }
   }
 }
@@ -75,11 +74,9 @@ export class HTMLTextElementEditor extends HTMLEditor {
     return this
   }
 
-  getValue() { return this.inputElement().value }
+  protected getValue(edit: HTMLElement) { return (<HTMLInputElement> edit).value }
 
-  protected inputElement() { return <HTMLInputElement>(this.edit) }
-
-  protected isEmpty() { return isBlank(this.getValue()) }
+  protected isEmpty(edit: HTMLElement) { return isBlank((<HTMLInputElement>edit).value) }
 
   protected setupEditElement() {
     const edit = <HTMLInputElement>document.createElement('input')
@@ -87,11 +84,11 @@ export class HTMLTextElementEditor extends HTMLEditor {
     return edit
   }
 
-  protected afterEditHook() {
-    if (this.isEmpty()) {
+  protected afterEditHook(edit: HTMLElement) {
+    if (this.isEmpty(edit)) {
       this.afterResetFn()
     } else {
-      this.afterEditFn(this.getValue())
+      this.afterEditFn((<HTMLInputElement>edit).value)
     }
   }
 }
@@ -116,17 +113,7 @@ export class HTMLTextWithPrefixElementEditor extends HTMLTextElementEditor {
     this.prefix = prefix
   }
 
-  getValue() { return this.prefix + this.inputElement().value }
-
-  protected isEmpty() { return isBlank(this.inputElement().value) }
-
-  protected afterEditHook() {
-    if (this.isEmpty()) {
-      this.afterResetFn()
-    } else {
-      this.afterEditFn(this.inputElement().value)
-    }
-  }
+  protected getValue(edit: HTMLElement) { return this.prefix + (<HTMLInputElement> edit).value }
 }
 
 function isBlank(str: string) {
