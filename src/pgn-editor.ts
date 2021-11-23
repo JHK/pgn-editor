@@ -4,7 +4,7 @@ import { Color, Key } from 'chessground/types';
 import { ChessInstance, Square } from 'chess.js';
 const Chess = require('chess.js');
 
-export class Board {
+export class PGNEditor {
   private cg: Api
   private engine: ChessEngine
 

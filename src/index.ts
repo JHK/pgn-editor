@@ -3,17 +3,17 @@ import './css/layout.scss';
 import './css/chessground.css';
 import './css/theme.css';
 import './css/index.css';
-import { Board } from './board';
+import { PGNEditor } from './pgn-editor';
 import { HTMLTextElementEditor, HTMLDateElementEditor, HTMLTextWithPrefixElementEditor, HTMLResultElementEditor } from './html-element-editor';
 
 const boardElement = document.getElementById('board')
-const board = new Board(boardElement);
+const editor = new PGNEditor(boardElement);
 
 const undoButton = document.getElementById('undo') as HTMLButtonElement
-undoButton.onclick = function () { board.undo() }
+undoButton.onclick = function () { editor.undo() }
 
 const pgnArea = document.getElementById('pgn') as HTMLTextAreaElement
-board.afterPgnUpdate = function (pgn: string) {
+editor.afterPgnUpdate = function (pgn: string) {
   pgnArea.value = pgn
   pgnArea.scrollTop = pgnArea.scrollHeight
 }
@@ -26,24 +26,24 @@ copyButton.onclick = function () {
 }
 
 new HTMLTextElementEditor(document.getElementById('white') as HTMLSpanElement).
-  afterEdit((value) => { board.header("White", value) })
+  afterEdit((value) => { editor.header("White", value) })
 // TODO: rating
 
 new HTMLTextElementEditor(document.getElementById('black') as HTMLSpanElement).
-  afterEdit((value) => { board.header("Black", value) })
+  afterEdit((value) => { editor.header("Black", value) })
 // TODO: rating
 
 new HTMLTextElementEditor(document.getElementById('event') as HTMLSpanElement).
-  afterEdit((value) => { board.header("Event", value) })
+  afterEdit((value) => { editor.header("Event", value) })
 
 new HTMLTextElementEditor(document.getElementById('site') as HTMLSpanElement).
-  afterEdit((value) => { board.header("Site", value) })
+  afterEdit((value) => { editor.header("Site", value) })
 
 new HTMLTextWithPrefixElementEditor("Round ", document.getElementById('round') as HTMLSpanElement).
-  afterEdit((value) => { board.header("Round", value) })
+  afterEdit((value) => { editor.header("Round", value) })
 
 new HTMLDateElementEditor(document.getElementById('date') as HTMLSpanElement).
-  afterEdit((value) => { board.header("Date", value) })
+  afterEdit((value) => { editor.header("Date", value) })
 
 new HTMLResultElementEditor(document.getElementById('result') as HTMLSpanElement).
-  afterEdit((value) => { board.header("Result", value) })
+  afterEdit((value) => { editor.header("Result", value) })
