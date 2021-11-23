@@ -13,10 +13,10 @@ const undoButton = document.getElementById('undo') as HTMLButtonElement
 undoButton.onclick = function () { editor.undo() }
 
 const pgnArea = document.getElementById('pgn') as HTMLTextAreaElement
-editor.afterPgnUpdate = function (pgn: string) {
+editor.afterPgnUpdate(function (pgn: string) {
   pgnArea.value = pgn
   pgnArea.scrollTop = pgnArea.scrollHeight
-}
+})
 
 const copyButton = document.getElementById('copy') as HTMLButtonElement
 copyButton.onclick = function () {

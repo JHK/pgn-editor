@@ -7,9 +7,7 @@ const Chess = require('chess.js');
 export class PGNEditor {
   private cg: Api
   private engine: ChessEngine
-
-  // http://www.chessclub.com/help/PGN-spec
-  afterPgnUpdate: (pgn: string) => any
+  private afterPgnUpdateFn: (pgn: string) => any = () => { }
 
   constructor(element: HTMLElement) {
     this.cg = Chessground(element, {
@@ -22,8 +20,13 @@ export class PGNEditor {
       }
     })
     this.engine = new ChessEngine()
-    this.afterPgnUpdate = () => { }
     this.updateUI()
+  }
+
+  // http://www.chessclub.com/help/PGN-spec
+  afterPgnUpdate(fn: (pgn: string) => any) {
+    this.afterPgnUpdateFn = fn
+    fn(this.engine.pgn())
   }
 
   undo(): void {
@@ -33,12 +36,12 @@ export class PGNEditor {
 
   updateUI(): void {
     this.updateChessGround()
-    this.afterPgnUpdate(this.engine.pgn())
+    this.afterPgnUpdateFn(this.engine.pgn())
   }
 
   header(key: string, value: string): void {
     this.engine.header(key, value)
-    this.afterPgnUpdate(this.engine.pgn())
+    this.afterPgnUpdateFn(this.engine.pgn())
   }
 
   private onMove() {
