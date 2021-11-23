@@ -1,6 +1,6 @@
 @import url("../../node_modules/@fortawesome/fontawesome-free/css/regular.min.css");
 
-textarea {
+under textarea {
   resize: none;
   border: none;
   width: 100%;

@@ -9,6 +9,7 @@ import '@fortawesome/fontawesome-free/js/solid'
 
 import { PGNEditor } from './pgn-editor';
 import { HTMLTextElementEditor, HTMLDateElementEditor, HTMLTextWithPrefixElementEditor, HTMLResultElementEditor } from './html-element-editor';
+import { LoadFromText } from './load-from-text';
 
 const boardElement = document.getElementById('board')
 const editor = new PGNEditor(boardElement);
@@ -56,3 +57,6 @@ while (boardElement.clientWidth != boardElement.parentElement.clientWidth) {
   boardElement.style.width = boardElement.parentElement.clientWidth + "px"
   boardElement.style.height = boardElement.clientWidth + "px"
 }
+
+const textLoader = new LoadFromText(document.body)
+textLoader.open(document.getElementById('open') as HTMLButtonElement)

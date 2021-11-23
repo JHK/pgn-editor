@@ -111,7 +111,7 @@ class HTMLEditorInputWithPrefixEditElement extends HTMLEditorInputEditElement {
 }
 
 class HTMLEditorResultEditElement implements HTMLEditorEditElement {
-  private selectElement = <HTMLSelectElement> document.createElement('select')
+  private selectElement = document.createElement('select') as HTMLSelectElement
 
   constructor() {
     const white = document.createElement('option')
