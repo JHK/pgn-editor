@@ -1,5 +1,86 @@
 import "./css/overlay.css"
 
+export class SaveDialog {
+  private overlay: HTMLDivElement
+  private textArea: HTMLTextAreaElement
+  private saveButton: HTMLButtonElement
+  private copyButton: HTMLButtonElement
+  private cancelButton: HTMLButtonElement
+
+  constructor(parent: HTMLElement) {
+    this.textArea = document.createElement("textarea")
+    this.textArea.addEventListener("keyup", this.textAreaKeyboardEvents())
+
+    this.saveButton = document.createElement("button")
+    this.saveButton.textContent = "Save"
+    this.saveButton.classList.add("save")
+    this.saveButton.onclick = () => { /* TODO */ }
+
+    this.copyButton = document.createElement("button")
+    this.copyButton.textContent = "Copy"
+    this.copyButton.classList.add("copy")
+    this.copyButton.onclick = () => {
+      this.copyToClipboard()
+      this.close()
+    }
+
+    this.cancelButton = document.createElement("button")
+    this.cancelButton.textContent = "Cancel"
+    this.cancelButton.classList.add("cancel")
+    this.cancelButton.onclick = () => { this.close() }
+
+    const title = document.createElement("h1")
+    title.textContent = "Save PGN"
+    title.append(this.saveButton)
+    title.append(this.copyButton)
+    title.append(this.cancelButton)
+
+    const description = document.createElement("p")
+    description.textContent = "Save PGN to file or clipboard"
+
+    const overlayBody = document.createElement("div")
+    overlayBody.append(title)
+    overlayBody.append(description)
+    overlayBody.append(this.textArea)
+
+    this.overlay = document.createElement("div")
+    this.overlay.classList.add("overlay")
+    this.overlay.append(overlayBody)
+    parent.append(this.overlay)
+  }
+
+  show() {
+    this.overlay.style.display = "block"
+    this.textArea.focus()
+  }
+
+  updatePGN(pgn: string) {
+    this.textArea.value = pgn
+    this.textArea.scrollTop = this.textArea.scrollHeight
+  }
+
+  private textAreaKeyboardEvents() {
+    return (e: KeyboardEvent) => {
+      if (e.key == "Escape") {
+        this.close()
+      }
+    }
+  }
+
+  private content(): string {
+    return this.textArea.value
+  }
+
+  private copyToClipboard() {
+    navigator.clipboard.writeText(this.content())
+  }
+
+
+  private close() {
+    this.overlay.style.display = "none"
+  }
+}
+
 export class LoadFromText {
   private overlay: HTMLDivElement
   private textArea: HTMLTextAreaElement

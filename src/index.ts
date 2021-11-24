@@ -8,7 +8,7 @@ import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
 
 import { PGNEditor } from './pgn-editor';
-import { LoadFromText } from './overlay';
+import { LoadFromText, SaveDialog } from './overlay';
 
 const editor = new PGNEditor({
   board: document.getElementById('board'),
@@ -24,16 +24,18 @@ const editor = new PGNEditor({
 const undoButton = document.getElementById('undo') as HTMLButtonElement
 undoButton.onclick = function () { editor.undo() }
 
+const saveDialog = new SaveDialog(document.body)
 const pgnArea = document.getElementById('pgn') as HTMLTextAreaElement
 editor.afterPgnUpdate(function (pgn: string) {
   pgnArea.value = pgn
   pgnArea.scrollTop = pgnArea.scrollHeight
+  saveDialog.updatePGN(pgn)
 })
 
-const copyButton = document.getElementById('copy') as HTMLButtonElement
-copyButton.onclick = function () {
-  navigator.clipboard.writeText(pgnArea.value)
-}
+const saveButton = document.getElementById('save') as HTMLButtonElement
+saveButton.addEventListener('click', function () {
+  saveDialog.show()
+})
 
 const textLoader = new LoadFromText(document.body)
 textLoader.onSubmit(function (pgn: string) {
