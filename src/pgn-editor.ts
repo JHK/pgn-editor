@@ -49,7 +49,6 @@ export class PGNEditor {
     }
 
     this.metadataSvc.load(this.engine)
-
     this.updateChessGround()
     return true
   }
@@ -122,9 +121,7 @@ class MetadataService {
 
   private updateMetadata(engine: ChessEngine, PGNKey: string, editor: HTMLEditor) {
     const value = engine.getHeader(PGNKey)
-    if (value && value != "") {
-      editor.setValue(value)
-    }
+    editor.setValue(value)
   }
 }
 

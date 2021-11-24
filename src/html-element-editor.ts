@@ -35,9 +35,8 @@ abstract class AbstractHTMLEditor implements HTMLEditor {
   }
 
   setValue(value: string): HTMLEditor {
-    this.span.textContent = value
-    this.span.classList.remove('placeholder')
-    // TODO: set value to `edit`
+    this.edit.setValue(value || "")
+    this.setDisplayValueAndClasses()
     return this
   }
 
@@ -55,17 +54,19 @@ abstract class AbstractHTMLEditor implements HTMLEditor {
     return () => {
       this.span.hidden = false
       this.edit.element().hidden = true
-
-      if (this.edit.isEmpty()) {
-        this.span.textContent = this.placeholderValue
-        if (!this.span.classList.contains('placeholder'))
-          this.span.classList.add('placeholder')
-      } else {
-        this.span.textContent = this.edit.getDisplayValue()
-        this.span.classList.remove('placeholder')
-      }
-
+      this.setDisplayValueAndClasses()
       this.callback(this.edit.getCallbackValue())
+    }
+  }
+
+  private setDisplayValueAndClasses() {
+    if (this.edit.isEmpty()) {
+      this.span.textContent = this.placeholderValue
+      if (!this.span.classList.contains('placeholder'))
+        this.span.classList.add('placeholder')
+    } else {
+      this.span.textContent = this.edit.getDisplayValue()
+      this.span.classList.remove('placeholder')
     }
   }
 }
@@ -74,6 +75,7 @@ interface HTMLEditorEditElement {
   element(): HTMLElement
   setHint(hint: string): any
   isEmpty(): boolean
+  setValue(value: string): any
   getDisplayValue(): string
   getCallbackValue(): any
 }
@@ -91,6 +93,10 @@ class HTMLEditorInputEditElement implements HTMLEditorEditElement {
 
   isEmpty(): boolean {
     return isBlank(this.inputElement.value)
+  }
+
+  setValue(value: string): void {
+    this.inputElement.value = value
   }
 
   getDisplayValue(): string {
@@ -154,6 +160,13 @@ class HTMLEditorResultEditElement implements HTMLEditorEditElement {
 
   isEmpty(): boolean {
     return this.selectElement.selectedOptions[0].text == "Other"
+  }
+
+  setValue(value: string) {
+    for (var i = 0, n = this.selectElement.options.length; i < n; i++) {
+      const option = this.selectElement.options[i]
+      option.selected = option.value == value
+    }
   }
 
   getDisplayValue(): string {
