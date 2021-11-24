@@ -52,8 +52,6 @@ export class LoadFromText {
     this.overlay.classList.add("overlay")
     this.overlay.append(overlayBody)
     parent.append(this.overlay)
-
-    this.open() // TODO: remove
   }
 
   open() {

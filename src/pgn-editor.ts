@@ -29,6 +29,18 @@ export class PGNEditor {
     fn(this.engine.pgn())
   }
 
+  loadPGN(pgn: string): boolean {
+    if (!this.engine.loadPGN(pgn)) {
+      return false
+    }
+
+    // TODO: load metadata
+
+    this.afterPgnUpdateFn(this.engine.pgn())
+    this.updateUI()
+    return true
+  }
+
   undo(): void {
     this.engine.undo()
     this.updateUI()
@@ -88,6 +100,10 @@ class ChessEngine {
 
   pgn(): string {
     return this.chess.pgn()
+  }
+
+  loadPGN(pgn: string): boolean {
+    return this.chess.load_pgn(pgn)
   }
 
   header(key: string, value: string): void {
