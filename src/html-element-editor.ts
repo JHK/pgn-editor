@@ -81,7 +81,7 @@ interface HTMLEditorEditElement {
 }
 
 class HTMLEditorInputEditElement implements HTMLEditorEditElement {
-  private inputElement = <HTMLInputElement> document.createElement('input')
+  protected inputElement = <HTMLInputElement> document.createElement('input')
 
   element(): HTMLInputElement {
     return this.inputElement
@@ -112,6 +112,19 @@ class HTMLEditorInputEditDateElement extends HTMLEditorInputEditElement {
   constructor() {
     super()
     this.element().type = 'date'
+  }
+
+  // TODO: 8.1.1.3 of https://www.chessclub.com/help/PGN-spec (requires parsing as well)
+  getCallbackValue(): string {
+    return this.date().toLocaleDateString()
+  }
+
+  getDisplayValue(): string {
+    return this.date().toDateString()
+  }
+
+  private date(): Date {
+    return new Date(this.inputElement.value)
   }
 }
 
