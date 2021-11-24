@@ -8,7 +8,7 @@ import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
 
 import { PGNEditor } from './pgn-editor';
-import { LoadFromText } from './load-from-text';
+import { LoadFromText } from './overlay';
 
 const editor = new PGNEditor({
   board: document.getElementById('board'),

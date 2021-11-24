@@ -1,4 +1,4 @@
-import "./css/load-from-text.css"
+import "./css/overlay.css"
 
 export class LoadFromText {
   private overlay: HTMLDivElement
