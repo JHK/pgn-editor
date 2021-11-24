@@ -8,11 +8,18 @@ import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
 
 import { PGNEditor } from './pgn-editor';
-import { HTMLTextElementEditor, HTMLDateElementEditor, HTMLTextWithPrefixElementEditor, HTMLResultElementEditor } from './html-element-editor';
 import { LoadFromText } from './load-from-text';
 
-const boardElement = document.getElementById('board')
-const editor = new PGNEditor(boardElement);
+const editor = new PGNEditor({
+  board: document.getElementById('board'),
+  white: document.getElementById('white'),
+  black: document.getElementById('black'),
+  event: document.getElementById('event'),
+  site: document.getElementById('site'),
+  round: document.getElementById('round'),
+  date: document.getElementById('date'),
+  result: document.getElementById('result'),
+})
 
 const undoButton = document.getElementById('undo') as HTMLButtonElement
 undoButton.onclick = function () { editor.undo() }
@@ -25,46 +32,20 @@ editor.afterPgnUpdate(function (pgn: string) {
 
 const copyButton = document.getElementById('copy') as HTMLButtonElement
 copyButton.onclick = function () {
-  navigator.clipboard.writeText(pgnArea.value).then(function() {
-    // TODO: visual feedback
-  })
+  navigator.clipboard.writeText(pgnArea.value)
 }
 
 const textLoader = new LoadFromText(document.body)
 textLoader.onSubmit(function (pgn: string) {
-  editor.loadPGN(pgn)
-  return true
+  return editor.loadPGN(pgn)
 })
 const openButton = document.getElementById('open') as HTMLButtonElement
 openButton.addEventListener('click', function () {
   textLoader.open()
 })
 
-new HTMLTextElementEditor(document.getElementById('white') as HTMLSpanElement).
-  afterEdit((value) => { editor.header("White", value) })
-// TODO: rating
-
-new HTMLTextElementEditor(document.getElementById('black') as HTMLSpanElement).
-  afterEdit((value) => { editor.header("Black", value) })
-// TODO: rating
-
-new HTMLTextElementEditor(document.getElementById('event') as HTMLSpanElement).
-  afterEdit((value) => { editor.header("Event", value) })
-
-new HTMLTextElementEditor(document.getElementById('site') as HTMLSpanElement).
-  afterEdit((value) => { editor.header("Site", value) })
-
-new HTMLTextWithPrefixElementEditor("Round ", document.getElementById('round') as HTMLSpanElement).
-  afterEdit((value) => { editor.header("Round", value) })
-
-new HTMLDateElementEditor(document.getElementById('date') as HTMLSpanElement).
-  afterEdit((value) => { editor.header("Date", value) })
-
-new HTMLResultElementEditor(document.getElementById('result') as HTMLSpanElement).
-  afterEdit((value) => { editor.header("Result", value) })
-
-
 // TODO: maybe there is someone who actually understands CSS ¯\_(ツ)_/¯
+const boardElement = document.getElementById('board')
 while (boardElement.clientWidth != boardElement.parentElement.clientWidth) {
   boardElement.style.width = boardElement.parentElement.clientWidth + "px"
   boardElement.style.height = boardElement.clientWidth + "px"

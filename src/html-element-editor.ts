@@ -1,4 +1,9 @@
-abstract class HTMLEditor {
+export interface HTMLEditor {
+  setValue(value: string): HTMLEditor
+  afterEdit(callback: (newValue: string) => any): HTMLEditor
+}
+
+abstract class AbstractHTMLEditor implements HTMLEditor {
   private span: HTMLElement
   private edit: HTMLEditorEditElement
   private callback: (newValue: string) => any = () => { }
@@ -26,6 +31,13 @@ abstract class HTMLEditor {
 
   afterEdit(callback: (newValue: string) => any): HTMLEditor {
     this.callback = callback
+    return this
+  }
+
+  setValue(value: string): HTMLEditor {
+    this.span.textContent = value
+    this.span.classList.remove('placeholder')
+    // TODO: set value to `edit`
     return this
   }
 
@@ -153,19 +165,19 @@ class HTMLEditorResultEditElement implements HTMLEditorEditElement {
   }
 }
 
-export class HTMLTextElementEditor extends HTMLEditor {
+export class HTMLTextElementEditor extends AbstractHTMLEditor {
   protected setupEditElement() {
     return new HTMLEditorInputEditElement()
   }
 }
 
-export class HTMLDateElementEditor extends HTMLEditor {
+export class HTMLDateElementEditor extends AbstractHTMLEditor {
   protected setupEditElement() {
     return new HTMLEditorInputEditDateElement
   }
 }
 
-export class HTMLTextWithPrefixElementEditor extends HTMLEditor {
+export class HTMLTextWithPrefixElementEditor extends AbstractHTMLEditor {
   constructor(prefix: string, element: HTMLElement) {
     super(element, prefix)
   }
@@ -175,7 +187,7 @@ export class HTMLTextWithPrefixElementEditor extends HTMLEditor {
   }
 }
 
-export class HTMLResultElementEditor extends HTMLEditor {
+export class HTMLResultElementEditor extends AbstractHTMLEditor {
   protected setupEditElement(prefix: string) {
     return new HTMLEditorResultEditElement()
   }
