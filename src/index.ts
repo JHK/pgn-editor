@@ -30,6 +30,16 @@ copyButton.onclick = function () {
   })
 }
 
+const textLoader = new LoadFromText(document.body)
+textLoader.onSubmit(function (pgn: string) {
+  // TODO: editor.loadPGN(pgn)
+  return true
+})
+const openButton = document.getElementById('open') as HTMLButtonElement
+openButton.addEventListener('click', function () {
+  textLoader.open()
+})
+
 new HTMLTextElementEditor(document.getElementById('white') as HTMLSpanElement).
   afterEdit((value) => { editor.header("White", value) })
 // TODO: rating
@@ -53,10 +63,9 @@ new HTMLDateElementEditor(document.getElementById('date') as HTMLSpanElement).
 new HTMLResultElementEditor(document.getElementById('result') as HTMLSpanElement).
   afterEdit((value) => { editor.header("Result", value) })
 
+
+// TODO: maybe there is someone who actually understands CSS ¯\_(ツ)_/¯
 while (boardElement.clientWidth != boardElement.parentElement.clientWidth) {
   boardElement.style.width = boardElement.parentElement.clientWidth + "px"
   boardElement.style.height = boardElement.clientWidth + "px"
 }
-
-const textLoader = new LoadFromText(document.body)
-textLoader.open(document.getElementById('open') as HTMLButtonElement)

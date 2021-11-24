@@ -12,12 +12,53 @@
   display: none; /* Hidden by default */
 }
 
-.overlay textarea {
+.overlay div {
   position: absolute;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
   top: 50%;
   left: 50%;
 
-  width: 500px;
-  height: 800px;
+  background-color: white;
+  width: 50%;
+  height: 50%;
   transform: translate(-50%,-50%);
+
+  padding: 20px;
+}
+
+.overlay .headlineWithCommands {
+  display: flex;
+  flex-direction: row;
+}
+
+.overlay button {
+  margin-left: 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #e7e7e7;
+  color: black;
+  text-align: center;
+  padding: 16px 16px;
+  float: right;
+}
+
+.overlay .submit {
+  background-color: #4CAF50;
+}
+
+.overlay .cancel {
+  background-color: #f44336;
+}
+
+.overlay .error {
+  color: #f44336;
+}
+
+.overlay div textarea {
+  width: 100%;
+  flex-grow: 1;
+  resize: none;
 }
