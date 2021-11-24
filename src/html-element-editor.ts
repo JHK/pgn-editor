@@ -92,7 +92,7 @@ class HTMLEditorInputEditElement implements HTMLEditorEditElement {
   }
 
   isEmpty(): boolean {
-    return isBlank(this.inputElement.value)
+    return isBlank(this.inputElement.value) || this.inputElement.value == "?"
   }
 
   setValue(value: string): void {
