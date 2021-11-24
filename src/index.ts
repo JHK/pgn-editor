@@ -33,6 +33,7 @@ copyButton.onclick = function () {
 const textLoader = new LoadFromText(document.body)
 textLoader.onSubmit(function (pgn: string) {
   // TODO: editor.loadPGN(pgn)
+  console.log("got pgn", pgn)
   return true
 })
 const openButton = document.getElementById('open') as HTMLButtonElement

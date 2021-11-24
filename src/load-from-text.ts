@@ -5,9 +5,9 @@ export class LoadFromText {
   private textArea: HTMLTextAreaElement
   private errorText: HTMLParagraphElement
   private submitButton: HTMLButtonElement
-  private openFileButton: HTMLButtonElement
+  private openFileInput: HTMLInputElement
   private cancelButton: HTMLButtonElement
-  private onSubmitFn: (pgn: string) => boolean = (pgn: string) => { return false }
+  private onSubmitFn: (pgn: string) => boolean = (pgn: string) => { return true }
 
   constructor(parent: HTMLElement) {
     this.textArea = document.createElement("textarea")
@@ -18,11 +18,10 @@ export class LoadFromText {
     this.submitButton.classList.add("submit")
     this.submitButton.onclick = () => { this.submit() }
 
-    this.openFileButton = document.createElement("button")
-    this.openFileButton.textContent = "Browse..."
-    this.openFileButton.classList.add("openFile")
-    // TODO: implement: https://stackoverflow.com/questions/3582671/how-to-open-a-local-disk-file-with-javascript
-    // this.openFileButton.onclick = () => { }
+    // TODO: styling: https://stackoverflow.com/questions/572768/styling-an-input-type-file-button
+    this.openFileInput = document.createElement("input")
+    this.openFileInput.type = "file"
+    this.openFileInput.addEventListener("change", this.loadFileToTextArea())
 
     this.cancelButton = document.createElement("button")
     this.cancelButton.textContent = "Cancel"
@@ -32,7 +31,7 @@ export class LoadFromText {
     const title = document.createElement("h1")
     title.textContent = "Load PGN"
     title.append(this.submitButton)
-    title.append(this.openFileButton)
+    title.append(this.openFileInput)
     title.append(this.cancelButton)
 
     const description = document.createElement("p")
@@ -90,6 +89,23 @@ export class LoadFromText {
       else if (e.key == "Enter" && e.shiftKey) {
         this.submit()
       }
+    }
+  }
+
+  private loadFileToTextArea() {
+    return (e: Event) => {
+      const file = (e.target as HTMLInputElement).files[0]
+      if (!file || file.type != "application/x-chess-pgn") {
+        console.log(file)
+        return
+      }
+
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const contents = e.target.result as string
+        this.textArea.value = contents
+      }
+      reader.readAsText(file)
     }
   }
 }
