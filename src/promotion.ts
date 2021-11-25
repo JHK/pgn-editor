@@ -37,6 +37,10 @@ export class PromotionButton {
     this.element = element
     this.element.classList.add('promotion')
     this.setActiveButton()
+
+    // Do not "flash" on page load
+    this.element.style.display = "none"
+    setTimeout(() => { this.element.style.display = "block" }, 300)
   }
 
   setVisibility(isVisible: boolean): void {
