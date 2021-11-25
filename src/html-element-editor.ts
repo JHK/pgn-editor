@@ -108,18 +108,22 @@ class HTMLEditorInputEditElement implements HTMLEditorEditElement {
   }
 }
 
+const pgnDateFormatRegexp = /\d{4}\.\d{2}\.\d{2}/g
+
 class HTMLEditorInputEditDateElement extends HTMLEditorInputEditElement {
   constructor() {
     super()
     this.element().type = 'date'
   }
 
-  // TODO: 8.1.1.3 of https://www.chessclub.com/help/PGN-spec (requires parsing as well)
   getCallbackValue(): string {
     const date = new Date(this.inputElement.value)
     if (isNaN(date.valueOf())) { return "" }
 
-    return date.toLocaleDateString()
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    return `${year}.${month}.${day}`
   }
 
   getDisplayValue(): string {
@@ -127,6 +131,30 @@ class HTMLEditorInputEditDateElement extends HTMLEditorInputEditElement {
     if (isNaN(date.valueOf())) { return "" }
 
     return date.toDateString()
+  }
+
+  setValue(value: string) {
+    // Try the PGN spec first
+    if (value.matchAll(pgnDateFormatRegexp)) {
+      const [year, month, day] = value.split('.').map((i) => Number(i))
+      const date = new Date()
+      date.setFullYear(year)
+      date.setMonth(month)
+      date.setDate(day)
+      this.setDate(date)
+      return
+    }
+
+    // Maybe JS/TS can parse the given date
+    const date = new Date(value)
+    if (!isNaN(date.valueOf())) {
+      this.setDate(date)
+      return
+    }
+  }
+
+  private setDate(date: Date) {
+    this.inputElement.value = date.toISOString().substr(0, 10)
   }
 }
 
