@@ -110,18 +110,13 @@ class MetadataService {
   }
 
   load(engine: ChessEngine) {
-    this.updateMetadata(engine, "White", this.white)
-    this.updateMetadata(engine, "Black", this.black)
-    this.updateMetadata(engine, "Event", this.event)
-    this.updateMetadata(engine, "Site", this.site)
-    this.updateMetadata(engine, "Round", this.round)
-    this.updateMetadata(engine, "Date", this.date)
-    this.updateMetadata(engine, "Result", this.result)
-  }
-
-  private updateMetadata(engine: ChessEngine, PGNKey: string, editor: HTMLEditor) {
-    const value = engine.getHeader(PGNKey)
-    editor.setValue(value)
+    this.white.setValue(engine.getHeader("White"))
+    this.black.setValue(engine.getHeader("Black"))
+    this.event.setValue(engine.getHeader("Event"))
+    this.site.setValue(engine.getHeader("Site"))
+    this.round.setValue(engine.getHeader("Round"))
+    this.date.setValue(engine.getHeader("Date"))
+    this.result.setValue(engine.getHeader("Result"))
   }
 }
 
