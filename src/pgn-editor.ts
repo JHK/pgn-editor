@@ -1,7 +1,7 @@
 import { Chessground } from 'chessground';
 import { Api } from 'chessground/api';
 import { Color, Key } from 'chessground/types';
-import { ChessInstance, Square } from 'chess.js';
+import { ChessInstance, Square, PieceType } from 'chess.js';
 import { HTMLDateElementEditor, HTMLEditor, HTMLResultElementEditor, HTMLTextElementEditor, HTMLTextWithPrefixElementEditor } from './html-element-editor';
 const Chess = require('chess.js');
 
@@ -128,6 +128,7 @@ class MetadataService {
 // wrapper of chess.js for compatibility with chessground
 class ChessEngine {
   private chess: ChessInstance
+  private promotionType: Exclude<PieceType, "p" | "k"> = "q"
 
   afterPgnUpdateFn: (pgn: string) => any = () => { }
 
@@ -141,7 +142,7 @@ class ChessEngine {
   }
 
   move(from: Key, to: Key): void {
-    this.chess.move({ from: (from as Square), to: (to as Square) })
+    this.chess.move({ from: (from as Square), to: (to as Square), promotion: this.promotionType })
     this.afterPgnUpdateFn(this.pgn())
   }
 
@@ -160,6 +161,10 @@ class ChessEngine {
 
     this.afterPgnUpdateFn(this.pgn())
     return true
+  }
+
+  promoteTo(pieceType: Exclude<PieceType, "p" | "k">) {
+    this.promotionType = pieceType
   }
 
   header(key: string, value: string): void {
