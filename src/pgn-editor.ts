@@ -60,11 +60,8 @@ export class PGNEditor {
 
   private onMove() {
     return (orig: Key, dest: Key) => {
-      console.log(`I got the move from ${orig} to ${dest}`)
-
       this.engine.move(orig, dest)
       this.updateChessGround()
-      this.engine.log()
     }
   }
 
