@@ -163,6 +163,8 @@ class ChessEngine {
   }
 
   header(key: string, value: string): void {
+    if (this.getHeader(key) == undefined && !value) {return}
+
     this.chess.header(key, value)
     this.afterPgnUpdateFn(this.pgn())
   }
