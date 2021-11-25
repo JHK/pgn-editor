@@ -1,5 +1,7 @@
 import "./css/overlay.css"
 
+import * as FileSaver from "file-saver";
+
 export class SaveDialog {
   private overlay: HTMLDivElement
   private textArea: HTMLTextAreaElement
@@ -14,14 +16,17 @@ export class SaveDialog {
     this.saveButton = document.createElement("button")
     this.saveButton.textContent = "Save"
     this.saveButton.classList.add("save")
-    this.saveButton.onclick = () => { /* TODO */ }
+    this.saveButton.onclick = () => {
+      this.saveToDisk()
+      this.close()
+    }
 
     this.copyButton = document.createElement("button")
     this.copyButton.textContent = "Copy"
     this.copyButton.classList.add("copy")
     this.copyButton.onclick = () => {
       this.copyToClipboard()
-      this.close()
+      this.close() // TODO: visual feedback
     }
 
     this.cancelButton = document.createElement("button")
@@ -75,6 +80,10 @@ export class SaveDialog {
     navigator.clipboard.writeText(this.content())
   }
 
+  private saveToDisk() {
+    const blob = new Blob([this.content()], { type: "application/x-chess-pgn" })
+    FileSaver.saveAs(blob, "game.pgn")
+  }
 
   private close() {
     this.overlay.style.display = "none"
