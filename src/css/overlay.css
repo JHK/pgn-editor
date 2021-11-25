@@ -1,3 +1,5 @@
+@import url("../../node_modules/@fortawesome/fontawesome-free/css/solid.css");
+
 .overlay {
   position: fixed; /* Sit on top of the page content */
   width: 100%; /* Full width (cover the whole page) */
@@ -45,6 +47,15 @@
   float: right;
 }
 
+.overlay button::after {
+  margin-left: 0.3em;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+}
+
 .overlay input {
   margin-left: 20px;
   border: none;
@@ -60,8 +71,24 @@
   background-color: #4CAF50;
 }
 
+.overlay .submit::after {
+  content: "\f00c";
+}
+
+.overlay .copy::after {
+  content: "\f328";
+}
+
+.overlay .save::after {
+  content: "\f0c7";
+}
+
 .overlay .cancel {
   background-color: #f44336;
+}
+
+.overlay .cancel::after {
+  content: "\f00d"
 }
 
 .overlay .error {
