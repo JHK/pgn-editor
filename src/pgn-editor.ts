@@ -89,6 +89,7 @@ export class PGNEditor {
     return (orig: Key, dest: Key) => {
       this.engine.move(orig, dest)
       this.updateChessGround()
+      this.maybeUpdateResult()
     }
   }
 
@@ -101,6 +102,23 @@ export class PGNEditor {
       },
       fen: this.engine.fen(),
     })
+  }
+
+  private maybeUpdateResult() {
+    if (this.engine.inCheckmate()) {
+      if (this.engine.color() == Color.Black) {
+        // next move would be black, i.e. white won the game
+        this.engine.header("Result", "1-0")
+        this.metadataSvc.result.setValue("1-0")
+      } else {
+        this.engine.header("Result", "0-1")
+        this.metadataSvc.result.setValue("0-1")
+      }
+    }
+    else if (this.engine.inDraw()) {
+      this.engine.header("Result", "1/2-1/2")
+      this.metadataSvc.result.setValue("1/2-1/2")
+    }
   }
 }
 
@@ -188,6 +206,14 @@ class ChessEngine {
 
   setPromotionPiece(piece: PromotionPiece) {
     this.promotionType = piece
+  }
+
+  inCheckmate(): boolean {
+    return this.chess.in_checkmate()
+  }
+
+  inDraw(): boolean {
+    return this.chess.in_draw() || this.chess.in_stalemate() || this.chess.insufficient_material()
   }
 
   // returns true if the next turn allows a promotion
