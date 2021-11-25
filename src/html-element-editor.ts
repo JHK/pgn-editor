@@ -116,15 +116,17 @@ class HTMLEditorInputEditDateElement extends HTMLEditorInputEditElement {
 
   // TODO: 8.1.1.3 of https://www.chessclub.com/help/PGN-spec (requires parsing as well)
   getCallbackValue(): string {
-    return this.date().toLocaleDateString()
+    const date = new Date(this.inputElement.value)
+    if (isNaN(date.valueOf())) { return "" }
+
+    return date.toLocaleDateString()
   }
 
   getDisplayValue(): string {
-    return this.date().toDateString()
-  }
+    const date = new Date(this.inputElement.value)
+    if (isNaN(date.valueOf())) { return "" }
 
-  private date(): Date {
-    return new Date(this.inputElement.value)
+    return date.toDateString()
   }
 }
 
