@@ -1,0 +1,11 @@
+.promotion {
+  transition: visibility 0.3s linear, opacity 0.3s linear;
+}
+
+.promotion button {
+  transition: visibility 0.3s linear, opacity 0.3s linear;
+}
+
+.promotion .active {
+  background-color: #4CAF50;
+}

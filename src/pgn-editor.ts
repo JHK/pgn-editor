@@ -1,9 +1,27 @@
 import { Chessground } from 'chessground';
 import { Api } from 'chessground/api';
-import { Color, Key } from 'chessground/types';
-import { ChessInstance, Square, PieceType } from 'chess.js';
+import { Key } from 'chessground/types';
+import { ChessInstance, Square } from 'chess.js';
 import { HTMLDateElementEditor, HTMLEditor, HTMLResultElementEditor, HTMLTextElementEditor, HTMLTextWithPrefixElementEditor } from './html-element-editor';
 const Chess = require('chess.js');
+
+export enum Color {
+  White = "white",
+  Black = "black"
+}
+
+export enum Piece {
+  King = "k",
+  Queen = "q",
+  Rook = "r",
+  Bishop = "b",
+  Knight = "n",
+  Pawn = "p"
+}
+
+export type PieceType = Piece.King | Piece.Queen | Piece.Rook | Piece.Bishop | Piece.Knight | Piece.Pawn
+
+export type PromotionPiece = Exclude < PieceType, Piece.Pawn | Piece.King >
 
 export interface EditorParams {
   board: HTMLElement
@@ -41,6 +59,15 @@ export class PGNEditor {
   afterPgnUpdate(fn: (pgn: string) => any) {
     this.engine.afterPgnUpdateFn = fn
     fn(this.engine.pgn())
+  }
+
+  mayPromote(fn: (mayPromote: boolean) => void) {
+    this.engine.mayPromoteFn = fn
+    fn(this.engine.mayPromote())
+  }
+
+  setPromotionPiece(piece: PromotionPiece) {
+    this.engine.setPromotionPiece(piece)
   }
 
   loadPGN(pgn: string): boolean {
@@ -120,9 +147,10 @@ class MetadataService {
 // wrapper of chess.js for compatibility with chessground
 class ChessEngine {
   private chess: ChessInstance
-  private promotionType: Exclude<PieceType, "p" | "k"> = "q"
+  private promotionType: PromotionPiece = Piece.Queen // TODO: remove this once the default is set via button
 
   afterPgnUpdateFn: (pgn: string) => any = () => { }
+  mayPromoteFn: (mayPromote: boolean) => void = () => { }
 
   constructor() {
     this.chess = new Chess()
@@ -131,11 +159,13 @@ class ChessEngine {
   undo(): void {
     this.chess.undo()
     this.afterPgnUpdateFn(this.pgn())
+    this.mayPromoteFn(this.mayPromote())
   }
 
   move(from: Key, to: Key): void {
     this.chess.move({ from: (from as Square), to: (to as Square), promotion: this.promotionType })
     this.afterPgnUpdateFn(this.pgn())
+    this.mayPromoteFn(this.mayPromote())
   }
 
   fen(): string {
@@ -152,10 +182,29 @@ class ChessEngine {
     }
 
     this.afterPgnUpdateFn(this.pgn())
+    this.mayPromoteFn(this.mayPromote())
     return true
   }
 
-  promoteTo(pieceType: Exclude<PieceType, "p" | "k">) {
+  setPromotionPiece(piece: PromotionPiece) {
+    this.promotionType = piece
+  }
+
+  // returns true if the next turn allows a promotion
+  mayPromote(): boolean {
+    const row = (this.chess.turn() == 'w') ? '7' : '2'
+    for (var letter of 'abcdefgh'.split('')) {
+      const square = letter + row as Square
+      const piece  = this.chess.get(square)
+      if (piece && piece.type == 'p' && piece.color == this.chess.turn()) {
+        if (this.chess.moves({ square: square }).length)
+          return true
+      }
+    }
+    return false
+  }
+
+  promoteTo(pieceType: PromotionPiece) {
     this.promotionType = pieceType
   }
 
@@ -176,7 +225,7 @@ class ChessEngine {
   }
 
   color(): Color {
-    return (this.chess.turn() == 'w') ? 'white' : 'black'
+    return (this.chess.turn() == 'w') ? Color.White : Color.Black
   }
 
   dests(): Map<Key, Key[]> {

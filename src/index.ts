@@ -7,8 +7,9 @@ import './css/index.css';
 import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
 
-import { PGNEditor } from './pgn-editor';
-import { LoadFromText, SaveDialog } from './overlay';
+import { PGNEditor, PromotionPiece } from './pgn-editor'
+import { LoadFromText, SaveDialog } from './overlay'
+import { PromotionButton } from './promotion'
 
 const editor = new PGNEditor({
   board: document.getElementById('board'),
@@ -35,6 +36,14 @@ editor.afterPgnUpdate(function (pgn: string) {
 const saveButton = document.getElementById('save') as HTMLButtonElement
 saveButton.addEventListener('click', function () {
   saveDialog.show()
+})
+
+const promotionButton = new PromotionButton(document.getElementById('promote'))
+promotionButton.setPromotionPiece(function (piece: PromotionPiece) {
+  editor.setPromotionPiece(piece)
+})
+editor.mayPromote(function(mayPromote: boolean) {
+  promotionButton.setVisibility(mayPromote)
 })
 
 const textLoader = new LoadFromText(document.body)
