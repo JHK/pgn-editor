@@ -147,7 +147,7 @@ class MetadataService {
 // wrapper of chess.js for compatibility with chessground
 class ChessEngine {
   private chess: ChessInstance
-  private promotionType: PromotionPiece = Piece.Queen // TODO: remove this once the default is set via button
+  private promotionType: PromotionPiece
 
   afterPgnUpdateFn: (pgn: string) => any = () => { }
   mayPromoteFn: (mayPromote: boolean) => void = () => { }

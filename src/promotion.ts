@@ -27,10 +27,12 @@ export class PromotionButton {
     this.knightButton = createButton("Promote to Knight", "fa-chess-knight")
     this.knightButton.onclick = () => { this.updatePromotionPiece(Piece.Knight) }
 
+    element.append(document.createElement('hr'))
     element.append(this.queenButton)
     element.append(this.rookButton)
     element.append(this.bishopButton)
     element.append(this.knightButton)
+    element.append(document.createElement('hr'))
 
     this.element = element
     this.element.classList.add('promotion')
