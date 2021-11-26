@@ -10,7 +10,7 @@ import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
 
 import { PGNEditor, PromotionPiece } from './pgn-editor'
-import { LoadFromText, SaveDialog } from './overlay'
+import { LoadDialog, SaveDialog } from './overlay'
 import { PromotionButton } from './promotion'
 import { AlertMessage } from './alert-message';
 
@@ -51,7 +51,7 @@ editor.mayPromote(function(mayPromote: boolean) {
   promotionButton.setVisibility(mayPromote)
 })
 
-const textLoader = new LoadFromText(document.body)
+const textLoader = new LoadDialog(document.body)
 textLoader.onSubmit(function (pgn: string) {
   return editor.loadPGN(pgn)
 })

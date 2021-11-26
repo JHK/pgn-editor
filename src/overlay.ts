@@ -4,55 +4,49 @@ import * as FileSaver from "file-saver";
 import { AlertMessage } from "./alert-message";
 
 export class SaveDialog {
-  private overlay: HTMLDivElement
-  private textArea: HTMLTextAreaElement
-  private saveButton: HTMLButtonElement
-  private copyButton: HTMLButtonElement
-  private cancelButton: HTMLButtonElement
+  private overlay: Overlay
 
   constructor(parent: HTMLElement, alert: AlertMessage) {
-    this.textArea = document.createElement("textarea")
-    this.textArea.addEventListener("keyup", this.textAreaKeyboardEvents())
+    this.overlay = new Overlay("Save PGN")
+    this.overlay.textArea.addEventListener("keyup", this.textAreaKeyboardEvents())
 
-    this.saveButton = createHTMLButton("Save", "Save PGN to disk", ["save"], () => {
+    this.overlay.addAction(createHTMLButton("Save", "Save PGN to disk", ["save"], () => {
       this.saveToDisk()
-      this.close()
-    })
+      this.overlay.hide()
+    }))
 
-    this.copyButton = createHTMLButton("Copy", "Copy PGN to clipboard", ["copy"], () => {
+    this.overlay.addAction(createHTMLButton("Copy", "Copy PGN to clipboard", ["copy"], () => {
       this.copyToClipboard()
       alert.info("Copied PGN to clipboard")
-      this.close()
-    })
+      this.overlay.hide()
+    }))
 
-    this.cancelButton = createHTMLButton("Cancel", "Close this dialog", ["cancel"], () => {
-      this.close()
-    });
+    this.overlay.addAction(createHTMLButton("Cancel", "Close this dialog", ["cancel"], () => {
+      this.overlay.hide()
+    }))
 
-    this.overlay = createOverlay("Save PGN", this.textArea, [this.saveButton, this.copyButton, this.cancelButton])
-    parent.append(this.overlay)
+    parent.append(this.overlay.html)
   }
 
   show() {
-    this.overlay.style.display = "block"
-    this.textArea.focus()
+    this.overlay.show()
   }
 
   updatePGN(pgn: string) {
-    this.textArea.value = pgn
-    this.textArea.scrollTop = this.textArea.scrollHeight
+    this.overlay.textArea.value = pgn
+    this.overlay.textArea.scrollTop = this.overlay.textArea.scrollHeight
   }
 
   private textAreaKeyboardEvents() {
     return (e: KeyboardEvent) => {
       if (e.key == "Escape") {
-        this.close()
+        this.overlay.hide()
       }
     }
   }
 
   private content(): string {
-    return this.textArea.value
+    return this.overlay.textArea.value
   }
 
   private copyToClipboard() {
@@ -63,46 +57,35 @@ export class SaveDialog {
     const blob = new Blob([this.content()], { type: "application/x-chess-pgn" })
     FileSaver.saveAs(blob, "game.pgn")
   }
-
-  private close() {
-    this.overlay.style.display = "none"
-  }
 }
 
-export class LoadFromText {
-  private overlay: HTMLDivElement
-  private textArea: HTMLTextAreaElement
-  private submitButton: HTMLButtonElement
-  private openFileInput: HTMLInputElement
-  private cancelButton: HTMLButtonElement
-  private alert: AlertMessage
+export class LoadDialog {
+  private overlay: Overlay
   private onSubmitFn: (pgn: string) => boolean = (pgn: string) => { return true }
 
   constructor(parent: HTMLElement) {
-    this.textArea = document.createElement("textarea")
-    this.textArea.addEventListener("keyup", this.textAreaKeyboardEvents())
+    this.overlay = new Overlay("Load PGN")
+    this.overlay.textArea.addEventListener("keyup", this.textAreaKeyboardEvents())
 
-    this.submitButton = createHTMLButton("Submit", "Load PGN from textarea", ["submit"], () => {
+    this.overlay.addAction(createHTMLButton("Submit", "Load PGN from textarea", ["submit"], () => {
       this.submit()
-    })
+    }))
 
     // TODO: styling: https://stackoverflow.com/questions/572768/styling-an-input-type-file-button
-    this.openFileInput = document.createElement("input")
-    this.openFileInput.type = "file"
-    this.openFileInput.addEventListener("change", this.loadFileToTextArea())
+    const openFileInput = document.createElement("input")
+    openFileInput.type = "file"
+    openFileInput.addEventListener("change", this.loadFileToTextArea())
+    this.overlay.addAction(openFileInput)
 
-    this.cancelButton = createHTMLButton("Cancel", "Close this dialog", ["cancel"], () => {
+    this.overlay.addAction(createHTMLButton("Cancel", "Close this dialog", ["cancel"], () => {
       this.close()
-    });
+    }))
 
-    this.alert = new AlertMessage(document.createElement('div'))
-    this.overlay = createOverlay("Open PGN", this.textArea, [this.submitButton, this.openFileInput, this.cancelButton], this.alert)
-    parent.append(this.overlay)
+    parent.append(this.overlay.html)
   }
 
   open() {
-    this.overlay.style.display = "block"
-    this.textArea.focus()
+    this.overlay.show()
   }
 
   onSubmit(fn: (pgn: string) => boolean) {
@@ -110,18 +93,18 @@ export class LoadFromText {
   }
 
   private submit() {
-    const pgn = this.textArea.value
+    const pgn = this.overlay.textArea.value
     if (this.onSubmitFn(pgn)) {
       this.close()
     } else {
-      this.alert.warning("Cound not parse PGN", 5000)
-      this.textArea.focus()
+      this.overlay.alert.warning("Cound not parse PGN", 5000)
+      this.overlay.textArea.focus()
     }
   }
 
   private close() {
-    this.overlay.style.display = "none"
-    this.textArea.value = ""
+    this.overlay.hide()
+    this.overlay.textArea.value = ""
   }
 
   private textAreaKeyboardEvents() {
@@ -146,7 +129,7 @@ export class LoadFromText {
       const reader = new FileReader()
       reader.onload = (e) => {
         const contents = e.target.result as string
-        this.textArea.value = contents
+        this.overlay.textArea.value = contents
       }
       reader.readAsText(file)
     }
@@ -167,23 +150,38 @@ function createHTMLButton(content: string, tooltip: string, cssClasses: string[]
   return button
 }
 
-function createTitleWithActions(content: string, ...actions: HTMLElement[]): HTMLHeadingElement {
-  const title = document.createElement("h1")
-  title.textContent = content
-  title.append(...actions)
-  return title
-}
+class Overlay {
+  public readonly alert = new AlertMessage(document.createElement("div"))
+  public readonly textArea = document.createElement("textarea")
+  public readonly html = document.createElement("div")
 
-function createOverlay(title: string, textArea: HTMLTextAreaElement, actions: HTMLElement[], alert?: AlertMessage): HTMLDivElement {
-  const overlayBody = document.createElement("div")
-  overlayBody.append(createTitleWithActions(title, ...actions))
-  if (alert) { overlayBody.append(alert.element) }
-  overlayBody.classList.add("overlay-body")
-  overlayBody.append(textArea)
+  private titleHTML: HTMLHeadingElement
 
-  const overlay = document.createElement("div")
-  overlay.classList.add("overlay")
-  overlay.append(overlayBody)
+  constructor(title: string) {
+    const bodyHTML = document.createElement("div")
 
-  return overlay
+    this.titleHTML = document.createElement("h1")
+    this.titleHTML.textContent = title
+
+    bodyHTML.classList.add("overlay-body")
+    bodyHTML.append(this.titleHTML)
+    bodyHTML.append(this.alert.element)
+    bodyHTML.append(this.textArea)
+
+    this.html.classList.add("overlay")
+    this.html.append(bodyHTML)
+  }
+
+  addAction(action: HTMLElement) {
+    this.titleHTML.append(action)
+  }
+
+  show() {
+    this.html.style.display = "block"
+    this.textArea.focus()
+  }
+
+  hide() {
+    this.html.style.display = "none"
+  }
 }
