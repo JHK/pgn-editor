@@ -47,6 +47,7 @@ export class SaveDialog {
     return this.overlay.textArea.value
   }
 
+  // TODO: doesn't work on my mobile
   private copyToClipboard() {
     navigator.clipboard.writeText(this.content()).then(() => {
       this.overlay.alert.success("Copied PGN to clipboard")
@@ -77,7 +78,12 @@ export class LoadDialog {
     const openFileInput = document.createElement("input")
     openFileInput.type = "file"
     openFileInput.addEventListener("change", this.loadFileToTextArea())
-    this.overlay.addAction(openFileInput)
+
+    const openFileLabel = document.createElement("label") as HTMLLabelElement
+    openFileLabel.classList.add("custom-file-upload")
+    openFileLabel.append(openFileInput)
+    openFileLabel.append("Open")
+    this.overlay.addAction(openFileLabel)
 
     this.overlay.addAction(createHTMLButton("Cancel", "Close this dialog", ["cancel"], () => {
       this.close()

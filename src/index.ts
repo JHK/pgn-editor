@@ -49,13 +49,13 @@ editor.mayPromote(function(mayPromote: boolean) {
   promotionButton.setVisibility(mayPromote)
 })
 
-const textLoader = new LoadDialog(document.body)
-textLoader.onSubmit(function (pgn: string) {
+const loadDialog = new LoadDialog(document.body)
+loadDialog.onSubmit(function (pgn: string) {
   return editor.loadPGN(pgn)
 })
 const openButton = document.getElementById('open') as HTMLButtonElement
 openButton.addEventListener('click', function () {
-  textLoader.open()
+  loadDialog.open()
 })
 
 // TODO: maybe there is someone who actually understands CSS ¯\_(ツ)_/¯
