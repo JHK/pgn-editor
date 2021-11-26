@@ -2,6 +2,7 @@ import "./css/overlay.css"
 
 import * as FileSaver from "file-saver";
 import { AlertMessage } from "./alert-message";
+import { addTooltip } from "./tooltip";
 
 export class SaveDialog {
   private overlay: Overlay
@@ -89,6 +90,7 @@ export class LoadDialog {
     openFileLabel.classList.add("custom-file-upload")
     openFileLabel.append(openFileInput)
     openFileLabel.append(openFileIcon)
+    addTooltip(openFileLabel, "Load PGN from disk")
     this.overlay.addAction(openFileLabel)
 
     parent.append(this.overlay.html)
@@ -147,17 +149,12 @@ export class LoadDialog {
 }
 
 function createHTMLButton(icon: string, tooltip: string, cssClasses: string[], onclick: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null): HTMLButtonElement {
-  const tooltipHTML = document.createElement("span")
-  tooltipHTML.classList.add("tooltiptext")
-  tooltipHTML.textContent = tooltip
-
   const iconHTML = document.createElement("i")
   iconHTML.classList.add("fas", icon)
 
   const button = document.createElement("button")
-  button.classList.add("tooltip")
   if (cssClasses.length) { button.classList.add(...cssClasses) }
-  button.append(tooltipHTML)
+  addTooltip(button, tooltip)
   button.append(iconHTML)
   button.onclick = onclick
   return button

@@ -1,5 +1,6 @@
 import "./css/promotion.css"
 import { Piece, PromotionPiece } from "./pgn-editor"
+import { addTooltip } from "./tooltip"
 
 const DefaultPromotionPiece: PromotionPiece = Piece.Queen
 
@@ -77,7 +78,7 @@ function createButton(title: string, cssClass: string): HTMLButtonElement {
   inner.classList.add("fas", cssClass)
 
   const button = document.createElement("button")
-  button.title = title
+  addTooltip(button, title)
   button.append(inner)
 
   return button
