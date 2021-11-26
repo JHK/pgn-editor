@@ -95,17 +95,8 @@ export class LoadFromText {
       this.close()
     });
 
-    const title = document.createElement("h1")
-    title.textContent = "Load PGN"
-    title.append(this.submitButton)
-    title.append(this.openFileInput)
-    title.append(this.cancelButton)
-
-    // TODO: style the alert
     this.alert = new AlertMessage(document.createElement('div'))
-
-    this.overlay = createOverlay("Save PGN", this.textArea, [this.submitButton, this.openFileInput, this.cancelButton], this.alert)
-
+    this.overlay = createOverlay("Open PGN", this.textArea, [this.submitButton, this.openFileInput, this.cancelButton], this.alert)
     parent.append(this.overlay)
   }
 
