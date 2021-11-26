@@ -14,7 +14,7 @@
   display: none; /* Hidden by default */
 }
 
-.overlay div {
+.overlay .overlay-body {
   position: absolute;
   overflow: hidden;
   display: flex;

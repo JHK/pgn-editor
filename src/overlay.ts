@@ -1,6 +1,7 @@
 import "./css/overlay.css"
 
 import * as FileSaver from "file-saver";
+import { AlertMessage } from "./alert-message";
 
 export class SaveDialog {
   private overlay: HTMLDivElement
@@ -9,48 +10,26 @@ export class SaveDialog {
   private copyButton: HTMLButtonElement
   private cancelButton: HTMLButtonElement
 
-  constructor(parent: HTMLElement) {
+  constructor(parent: HTMLElement, alert: AlertMessage) {
     this.textArea = document.createElement("textarea")
     this.textArea.addEventListener("keyup", this.textAreaKeyboardEvents())
 
-    this.saveButton = document.createElement("button")
-    this.saveButton.textContent = "Save"
-    this.saveButton.classList.add("save")
-    this.saveButton.onclick = () => {
+    this.saveButton = createHTMLButton("Save", "Save PGN to disk", ["save"], () => {
       this.saveToDisk()
       this.close()
-    }
+    })
 
-    this.copyButton = document.createElement("button")
-    this.copyButton.textContent = "Copy"
-    this.copyButton.classList.add("copy")
-    this.copyButton.onclick = () => {
+    this.copyButton = createHTMLButton("Copy", "Copy PGN to clipboard", ["copy"], () => {
       this.copyToClipboard()
-      this.close() // TODO: visual feedback
-    }
+      alert.info("Copied PGN to clipboard")
+      this.close()
+    })
 
-    this.cancelButton = document.createElement("button")
-    this.cancelButton.textContent = "Cancel"
-    this.cancelButton.classList.add("cancel")
-    this.cancelButton.onclick = () => { this.close() }
+    this.cancelButton = createHTMLButton("Cancel", "Close this dialog", ["cancel"], () => {
+      this.close()
+    });
 
-    const title = document.createElement("h1")
-    title.textContent = "Save PGN"
-    title.append(this.saveButton)
-    title.append(this.copyButton)
-    title.append(this.cancelButton)
-
-    const description = document.createElement("p")
-    description.textContent = "Save PGN to file or clipboard"
-
-    const overlayBody = document.createElement("div")
-    overlayBody.append(title)
-    overlayBody.append(description)
-    overlayBody.append(this.textArea)
-
-    this.overlay = document.createElement("div")
-    this.overlay.classList.add("overlay")
-    this.overlay.append(overlayBody)
+    this.overlay = createOverlay("Save PGN", this.textArea, [this.saveButton, this.copyButton, this.cancelButton])
     parent.append(this.overlay)
   }
 
@@ -93,30 +72,28 @@ export class SaveDialog {
 export class LoadFromText {
   private overlay: HTMLDivElement
   private textArea: HTMLTextAreaElement
-  private errorText: HTMLParagraphElement
   private submitButton: HTMLButtonElement
   private openFileInput: HTMLInputElement
   private cancelButton: HTMLButtonElement
+  private alert: AlertMessage
   private onSubmitFn: (pgn: string) => boolean = (pgn: string) => { return true }
 
   constructor(parent: HTMLElement) {
     this.textArea = document.createElement("textarea")
     this.textArea.addEventListener("keyup", this.textAreaKeyboardEvents())
 
-    this.submitButton = document.createElement("button")
-    this.submitButton.textContent = "Submit"
-    this.submitButton.classList.add("submit")
-    this.submitButton.onclick = () => { this.submit() }
+    this.submitButton = createHTMLButton("Submit", "Load PGN from textarea", ["submit"], () => {
+      this.submit()
+    })
 
     // TODO: styling: https://stackoverflow.com/questions/572768/styling-an-input-type-file-button
     this.openFileInput = document.createElement("input")
     this.openFileInput.type = "file"
     this.openFileInput.addEventListener("change", this.loadFileToTextArea())
 
-    this.cancelButton = document.createElement("button")
-    this.cancelButton.textContent = "Cancel"
-    this.cancelButton.classList.add("cancel")
-    this.cancelButton.onclick = () => { this.close() }
+    this.cancelButton = createHTMLButton("Cancel", "Close this dialog", ["cancel"], () => {
+      this.close()
+    });
 
     const title = document.createElement("h1")
     title.textContent = "Load PGN"
@@ -124,23 +101,11 @@ export class LoadFromText {
     title.append(this.openFileInput)
     title.append(this.cancelButton)
 
-    const description = document.createElement("p")
-    description.textContent = "Paste PGN or load from file"
+    // TODO: style the alert
+    this.alert = new AlertMessage(document.createElement('div'))
 
-    this.errorText = document.createElement("p")
-    this.errorText.textContent = "Could not parse PGN"
-    this.errorText.classList.add("error")
-    this.errorText.style.display = "none"
+    this.overlay = createOverlay("Save PGN", this.textArea, [this.submitButton, this.openFileInput, this.cancelButton], this.alert)
 
-    const overlayBody = document.createElement("div")
-    overlayBody.append(title)
-    overlayBody.append(description)
-    overlayBody.append(this.errorText)
-    overlayBody.append(this.textArea)
-
-    this.overlay = document.createElement("div")
-    this.overlay.classList.add("overlay")
-    this.overlay.append(overlayBody)
     parent.append(this.overlay)
   }
 
@@ -158,14 +123,13 @@ export class LoadFromText {
     if (this.onSubmitFn(pgn)) {
       this.close()
     } else {
-      this.errorText.style.display = "block"
+      this.alert.warning("Cound not parse PGN", 5000)
       this.textArea.focus()
     }
   }
 
   private close() {
     this.overlay.style.display = "none"
-    this.errorText.style.display = "none"
     this.textArea.value = ""
   }
 
@@ -196,4 +160,39 @@ export class LoadFromText {
       reader.readAsText(file)
     }
   }
+}
+
+function createHTMLButton(content: string, tooltip: string, cssClasses: string[], onclick: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null): HTMLButtonElement {
+  const tooltipHTML = document.createElement('span')
+  tooltipHTML.classList.add("tooltiptext")
+  tooltipHTML.textContent = tooltip
+
+  const button = document.createElement('button')
+  button.textContent = content
+  button.classList.add("tooltip")
+  button.classList.add(...cssClasses)
+  button.append(tooltipHTML)
+  button.onclick = onclick
+  return button
+}
+
+function createTitleWithActions(content: string, ...actions: HTMLElement[]): HTMLHeadingElement {
+  const title = document.createElement("h1")
+  title.textContent = content
+  title.append(...actions)
+  return title
+}
+
+function createOverlay(title: string, textArea: HTMLTextAreaElement, actions: HTMLElement[], alert?: AlertMessage): HTMLDivElement {
+  const overlayBody = document.createElement("div")
+  overlayBody.append(createTitleWithActions(title, ...actions))
+  if (alert) { overlayBody.append(alert.element) }
+  overlayBody.classList.add("overlay-body")
+  overlayBody.append(textArea)
+
+  const overlay = document.createElement("div")
+  overlay.classList.add("overlay")
+  overlay.append(overlayBody)
+
+  return overlay
 }
