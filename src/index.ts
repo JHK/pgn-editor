@@ -25,12 +25,10 @@ const editor = new PGNEditor({
   result: document.getElementById('result'),
 })
 
-const alertMessage = new AlertMessage(document.getElementById('alert'))
-
 const undoButton = document.getElementById('undo') as HTMLButtonElement
 undoButton.onclick = function () { editor.undo() }
 
-const saveDialog = new SaveDialog(document.body, alertMessage)
+const saveDialog = new SaveDialog(document.body)
 const pgnArea = document.getElementById('pgn') as HTMLTextAreaElement
 editor.afterPgnUpdate(function (pgn: string) {
   pgnArea.value = pgn

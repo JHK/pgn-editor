@@ -6,7 +6,7 @@ import { AlertMessage } from "./alert-message";
 export class SaveDialog {
   private overlay: Overlay
 
-  constructor(parent: HTMLElement, alert: AlertMessage) {
+  constructor(parent: HTMLElement) {
     this.overlay = new Overlay("Save PGN")
     this.overlay.textArea.addEventListener("keyup", this.textAreaKeyboardEvents())
 
@@ -17,8 +17,6 @@ export class SaveDialog {
 
     this.overlay.addAction(createHTMLButton("Copy", "Copy PGN to clipboard", ["copy"], () => {
       this.copyToClipboard()
-      alert.info("Copied PGN to clipboard")
-      this.overlay.hide()
     }))
 
     this.overlay.addAction(createHTMLButton("Cancel", "Close this dialog", ["cancel"], () => {
@@ -50,7 +48,11 @@ export class SaveDialog {
   }
 
   private copyToClipboard() {
-    navigator.clipboard.writeText(this.content())
+    navigator.clipboard.writeText(this.content()).then(() => {
+      this.overlay.alert.success("Copied PGN to clipboard")
+    }, (reason) => {
+      this.overlay.alert.warning(`Failed copying PGN to clipboard: ${reason}`)
+    })
   }
 
   private saveToDisk() {
