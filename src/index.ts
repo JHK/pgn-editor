@@ -3,6 +3,7 @@ import './css/layout.scss';
 import './css/chessground.css';
 import './css/theme.css';
 import './css/index.css';
+import './css/alert.css';
 
 import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
@@ -10,6 +11,7 @@ import '@fortawesome/fontawesome-free/js/solid'
 import { PGNEditor, PromotionPiece } from './pgn-editor'
 import { LoadFromText, SaveDialog } from './overlay'
 import { PromotionButton } from './promotion'
+import { AlertMessage } from './alert-message';
 
 const editor = new PGNEditor({
   board: document.getElementById('board'),
@@ -21,6 +23,8 @@ const editor = new PGNEditor({
   date: document.getElementById('date'),
   result: document.getElementById('result'),
 })
+
+const alertMessage = new AlertMessage(document.getElementById('alert'))
 
 const undoButton = document.getElementById('undo') as HTMLButtonElement
 undoButton.onclick = function () { editor.undo() }
