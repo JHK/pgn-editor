@@ -50,6 +50,11 @@ export class SaveDialog {
 
   // TODO: doesn't work on my mobile
   private copyToClipboard() {
+    if (navigator.clipboard == undefined) {
+      this.overlay.alert.warning("Unable to write to clipboard")
+      return
+    }
+
     navigator.clipboard.writeText(this.content()).then(() => {
       this.overlay.alert.success("Copied PGN to clipboard")
     }, (reason) => {
