@@ -48,7 +48,6 @@ export class SaveDialog {
     return this.overlay.textArea.value
   }
 
-  // TODO: doesn't work on my mobile
   private copyToClipboard() {
     if (navigator.clipboard == undefined) {
       this.overlay.alert.warning("Unable to write to clipboard")
