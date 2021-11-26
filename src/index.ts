@@ -3,6 +3,7 @@ import './css/layout.scss';
 import './css/chessground.css';
 import './css/theme.css';
 import './css/index.css';
+import './css/tooltip.css';
 import './css/alert.css';
 
 import '@fortawesome/fontawesome-free/js/fontawesome'
