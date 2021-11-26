@@ -15,7 +15,6 @@
 
 .overlay .overlay-body {
   position: absolute;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
 
@@ -31,85 +30,46 @@
 }
 
 .overlay .headlineWithCommands {
-  display: flex;
-  flex-direction: row;
+  margin-bottom: 10px;
+  display: table;
 }
 
-.overlay button {
+.overlay h1 {
+  display: table-cell;
+  vertical-align: middle;
+  font-family: sans-serif;
+}
+
+.overlay button, .overlay .custom-file-upload {
   margin-left: 20px;
   border: none;
   border-radius: 5px;
   background-color: #e7e7e7;
   color: black;
+  font-size: x-large;
   text-align: center;
   padding: 16px 16px;
   float: right;
   cursor: pointer;
+  font-family: sans-serif;
+  height: 60px;
+  width: 60px;
 }
 
-.overlay button::after {
-  margin-left: 0.3em;
-  font-style: normal;
-  font-variant: normal;
-  text-rendering: auto;
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
+.overlay .custom-file-upload {
+  box-sizing: border-box;
 }
 
 .overlay input[type="file"] {
   display: none;
 }
 
-.overlay .custom-file-upload {
-  margin-left: 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #e7e7e7;
-  color: black;
-  text-align: center;
-  padding: 16px 16px;
-  float: right;
-  cursor: pointer;
-  font-size: medium;
-  font-weight: normal;
-}
-
-.overlay .custom-file-upload::after {
-  margin-left: 0.3em;
-  font-style: normal;
-  font-variant: normal;
-  text-rendering: auto;
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  content: "\f07c";
-}
-
-.overlay .submit {
+.overlay .green {
   background-color: #4CAF50;
 }
 
-.overlay .submit::after {
-  content: "\f00c";
-}
-
-.overlay .copy::after {
-  content: "\f328";
-}
-
-.overlay .save::after {
-  content: "\f0c7";
-}
-
-.overlay .cancel {
+.overlay .red {
   background-color: #f44336;
-}
-
-.overlay .cancel::after {
-  content: "\f00d"
-}
-
-.overlay .error {
-  color: #f44336;
 }
 
 .overlay div textarea {

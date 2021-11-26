@@ -10,17 +10,17 @@ export class SaveDialog {
     this.overlay = new Overlay("Save PGN")
     this.overlay.textArea.addEventListener("keyup", this.textAreaKeyboardEvents())
 
-    this.overlay.addAction(createHTMLButton("Save", "Save PGN to disk", ["save"], () => {
+    this.overlay.addAction(createHTMLButton("fa-times", "Close this dialog", ["red"], () => {
+      this.overlay.hide()
+    }))
+
+    this.overlay.addAction(createHTMLButton("fa-save", "Save PGN to disk", [], () => {
       this.saveToDisk()
       this.overlay.hide()
     }))
 
-    this.overlay.addAction(createHTMLButton("Copy", "Copy PGN to clipboard", ["copy"], () => {
+    this.overlay.addAction(createHTMLButton("fa-clipboard", "Copy PGN to clipboard", [], () => {
       this.copyToClipboard()
-    }))
-
-    this.overlay.addAction(createHTMLButton("Cancel", "Close this dialog", ["cancel"], () => {
-      this.overlay.hide()
     }))
 
     parent.append(this.overlay.html)
@@ -67,27 +67,29 @@ export class LoadDialog {
   private onSubmitFn: (pgn: string) => boolean = (pgn: string) => { return true }
 
   constructor(parent: HTMLElement) {
-    this.overlay = new Overlay("Load PGN")
+    this.overlay = new Overlay("Open PGN")
     this.overlay.textArea.addEventListener("keyup", this.textAreaKeyboardEvents())
 
-    this.overlay.addAction(createHTMLButton("Submit", "Load PGN from textarea", ["submit"], () => {
+    this.overlay.addAction(createHTMLButton("fa-times", "Close this dialog", ["red"], () => {
+      this.close()
+    }))
+
+    this.overlay.addAction(createHTMLButton("fa-check", "Open this PGN", ["green"], () => {
       this.submit()
     }))
 
-    // TODO: styling: https://stackoverflow.com/questions/572768/styling-an-input-type-file-button
     const openFileInput = document.createElement("input")
     openFileInput.type = "file"
     openFileInput.addEventListener("change", this.loadFileToTextArea())
 
-    const openFileLabel = document.createElement("label") as HTMLLabelElement
+    const openFileIcon = document.createElement("i")
+    openFileIcon.classList.add("fas", "fa-folder-open")
+
+    const openFileLabel = document.createElement("label")
     openFileLabel.classList.add("custom-file-upload")
     openFileLabel.append(openFileInput)
-    openFileLabel.append("Open")
+    openFileLabel.append(openFileIcon)
     this.overlay.addAction(openFileLabel)
-
-    this.overlay.addAction(createHTMLButton("Cancel", "Close this dialog", ["cancel"], () => {
-      this.close()
-    }))
 
     parent.append(this.overlay.html)
   }
@@ -144,16 +146,19 @@ export class LoadDialog {
   }
 }
 
-function createHTMLButton(content: string, tooltip: string, cssClasses: string[], onclick: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null): HTMLButtonElement {
-  const tooltipHTML = document.createElement('span')
+function createHTMLButton(icon: string, tooltip: string, cssClasses: string[], onclick: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null): HTMLButtonElement {
+  const tooltipHTML = document.createElement("span")
   tooltipHTML.classList.add("tooltiptext")
   tooltipHTML.textContent = tooltip
 
-  const button = document.createElement('button')
-  button.textContent = content
+  const iconHTML = document.createElement("i")
+  iconHTML.classList.add("fas", icon)
+
+  const button = document.createElement("button")
   button.classList.add("tooltip")
-  button.classList.add(...cssClasses)
+  if (cssClasses.length) { button.classList.add(...cssClasses) }
   button.append(tooltipHTML)
+  button.append(iconHTML)
   button.onclick = onclick
   return button
 }
@@ -163,16 +168,19 @@ class Overlay {
   public readonly textArea = document.createElement("textarea")
   public readonly html = document.createElement("div")
 
-  private titleHTML: HTMLHeadingElement
+  private headerHTML: HTMLElement
 
   constructor(title: string) {
     const bodyHTML = document.createElement("div")
+    const titleHTML = document.createElement("h1")
+    titleHTML.textContent = title
 
-    this.titleHTML = document.createElement("h1")
-    this.titleHTML.textContent = title
+    this.headerHTML = document.createElement("div")
+    this.headerHTML.classList.add("headlineWithCommands")
+    this.headerHTML.append(titleHTML)
 
     bodyHTML.classList.add("overlay-body")
-    bodyHTML.append(this.titleHTML)
+    bodyHTML.append(this.headerHTML)
     bodyHTML.append(this.alert.element)
     bodyHTML.append(this.textArea)
 
@@ -181,7 +189,7 @@ class Overlay {
   }
 
   addAction(action: HTMLElement) {
-    this.titleHTML.append(action)
+    this.headerHTML.append(action)
   }
 
   show() {

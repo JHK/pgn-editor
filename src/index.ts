@@ -12,7 +12,6 @@ import '@fortawesome/fontawesome-free/js/solid'
 import { PGNEditor, PromotionPiece } from './pgn-editor'
 import { LoadDialog, SaveDialog } from './overlay'
 import { PromotionButton } from './promotion'
-import { AlertMessage } from './alert-message';
 
 const editor = new PGNEditor({
   board: document.getElementById('board'),

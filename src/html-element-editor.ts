@@ -135,7 +135,7 @@ class HTMLEditorInputEditDateElement extends HTMLEditorInputEditElement {
 
   setValue(value: string) {
     // Try the PGN spec first
-    if (value.matchAll(pgnDateFormatRegexp)) {
+    if (value.match(pgnDateFormatRegexp)) {
       const [year, month, day] = value.split('.').map((i) => Number(i))
       const date = new Date()
       date.setFullYear(year)
