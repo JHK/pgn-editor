@@ -24,9 +24,16 @@ export class SaveDialog {
       this.copyToClipboard()
     }))
 
-    this.overlay.addAction(createHTMLButton("fa-share", "Import PGN on lichess", [], () => {
-      this.copyToLichess()
-    }))
+    const lichessImage = document.createElement('img')
+    lichessImage.src = new URL("../assets/images/lichess.svg", import.meta.url).toString()
+    lichessImage.width = 28
+    lichessImage.height = 28
+
+    const lichessButton = document.createElement('button')
+    addTooltip(lichessButton, "Import PGN on lichess")
+    lichessButton.onclick = () => { this.copyToLichess() }
+    lichessButton.append(lichessImage)
+    this.overlay.addAction(lichessButton)
 
     parent.append(this.overlay.html)
   }
