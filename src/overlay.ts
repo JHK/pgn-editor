@@ -24,6 +24,10 @@ export class SaveDialog {
       this.copyToClipboard()
     }))
 
+    this.overlay.addAction(createHTMLButton("fa-share", "Import PGN on lichess", [], () => {
+      this.copyToLichess()
+    }))
+
     parent.append(this.overlay.html)
   }
 
@@ -59,6 +63,11 @@ export class SaveDialog {
     }, (reason) => {
       this.overlay.alert.warning(`Failed copying PGN to clipboard: ${reason}`)
     })
+  }
+
+  private copyToLichess() {
+    const url = "https://lichess.org/paste?pgn=" + encodeURI(this.content())
+    window.open(url, "_blank")
   }
 
   private saveToDisk() {
