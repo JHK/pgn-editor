@@ -74,6 +74,11 @@ export class SaveDialog {
 
   private copyToLichess() {
     const url = "https://lichess.org/paste?pgn=" + encodeURI(this.content())
+    if (url.length > 2048) {
+      this.overlay.alert.warning('This PGN is too large. Copy to clipboard, open <a href="https://lichess.org/paste" target="_blank">lichess</a> and paste the content')
+      return
+    }
+
     window.open(url, "_blank")
   }
 
