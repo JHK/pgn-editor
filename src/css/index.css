@@ -14,6 +14,7 @@ under textarea {
 
 .editable-text {
   padding: 10px;
+  cursor: pointer;
 }
 
 .placeholder {
