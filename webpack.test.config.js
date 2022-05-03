@@ -1,5 +1,5 @@
 const path = require('path');
-// TODO: consolidate parameters with webpack.config.js
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -9,7 +9,13 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     clean: true
   },
-  module: {
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'PGN Editor',
+      template: 'src/index.html',
+    }),
+  ],
+  module: { // TODO: consolidate parameters with webpack.config.js
     rules: [
       {
         test: /\.m?js/,
