@@ -5,7 +5,7 @@ module.exports = {
   mode: 'development',
   entry: './src/pgn-editor.spec.ts', // TODO: have a real entry point for all tests
   output: {
-    filename: 'testBundle.js',
+    filename: 'test.bundle.js',
     path: path.resolve(__dirname, 'dist'),
     clean: true
   },
