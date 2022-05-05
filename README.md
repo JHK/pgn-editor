@@ -9,6 +9,9 @@ Chess editor to easily create PGN files.
 - [Usage](#usage)
 - [License](#license)
 - [Development](#development)
+    - [Install dependencies](#install-dependencies)
+    - [Build & start server](#build--start-server)
+    - [Build & run tests](#build--run-tests)
 
 ## Usage
 
@@ -32,14 +35,19 @@ GPLv3. See [LICENSE](LICENSE).
 
 ## Development
 
-Install dependencies
+### Install dependencies
 ```bash
 npm install
 ```
 
-Build & start server
+### Build & start server
 ```bash
 npm start
 ```
 
 Open http://localhost:8080/
+
+### Build & run tests
+```bash
+npm test
+```

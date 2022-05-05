@@ -2,11 +2,12 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: 'development', // TODO: https://webpack.js.org/guides/production/
-  entry: { index: './src/index.ts' },
-  devtool: 'inline-source-map',
-  devServer: {
-    static: './dist',
+  mode: 'development',
+  entry: './src/pgn-editor.spec.ts', // TODO: have a real entry point for all tests
+  output: {
+    filename: 'test.bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -14,7 +15,7 @@ module.exports = {
       template: 'src/index.html',
     }),
   ],
-  module: {
+  module: { // TODO: consolidate parameters with webpack.config.js
     rules: [
       {
         test: /\.m?js/,
@@ -56,21 +57,4 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
-  output: {
-    filename: '[name].[contenthash].js',
-    path: path.resolve(__dirname, 'dist'),
-    clean: true,
-  },
-  optimization: {
-    runtimeChunk: 'single',
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-        },
-      },
-    },
-  }
 };
