@@ -42,4 +42,23 @@ describe('PGN Editor', () => {
       expect(mayPromote).to.be.true
     })
   })
+
+  context("afterPgnUpdate", () => {
+    it("Runs callback", () => {
+      let pgn = ""
+      editor.afterPgnUpdate((p) => { pgn = p })
+      editor.loadPGN("1. e4 d5 2. exd5 c6 3. dxc6 Bd7 4. cxb7 Bc8")
+      expect(pgn).to.equal("1. e4 d5 2. exd5 c6 3. dxc6 Bd7 4. cxb7 Bc8")
+    })
+  })
+
+  context("undo", () => {
+    it("Allows to undo moves", () => {
+      let pgn = ""
+      editor.afterPgnUpdate((p) => { pgn = p })
+      editor.loadPGN("1. e4 d5 2. exd5 c6 3. dxc6 Bd7 4. cxb7 Bc8")
+      editor.undo()
+      expect(pgn).to.equal("1. e4 d5 2. exd5 c6 3. dxc6 Bd7 4. cxb7")
+    })
+  })
 })
