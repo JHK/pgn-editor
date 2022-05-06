@@ -3,11 +3,11 @@
     "outDir": "./dist/",
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "ES2020",
-    "target": "es6",
+    "module": "ES2022",
+    "target": "ES2020",
     "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node",
-    "lib": ["ES2021", "DOM"]
+    "lib": ["DOM"]
   }
 }
