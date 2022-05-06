@@ -1,9 +1,9 @@
-import { Chessground } from 'chessground';
-import { Api } from 'chessground/api';
-import { Key } from 'chessground/types';
-import { ChessInstance, Square } from 'chess.js';
-import { HTMLDateElementEditor, HTMLEditor, HTMLResultElementEditor, HTMLTextElementEditor, HTMLTextWithPrefixElementEditor } from './html-element-editor';
-const Chess = require('chess.js');
+import { Chessground } from 'chessground'
+import { Api } from 'chessground/api'
+import { Key } from 'chessground/types'
+import { Chess, ChessInstance, Square } from 'chess.js'
+import { HTMLDateElementEditor, HTMLEditor, HTMLResultElementEditor, HTMLTextElementEditor, HTMLTextWithPrefixElementEditor } from './html-element-editor'
+import { Squares } from './squares'
 
 export enum Color {
   White = "white",
@@ -256,7 +256,7 @@ class ChessEngine {
 
   dests(): Map<Key, Key[]> {
     const dests = new Map();
-    this.chess.SQUARES.forEach(s => {
+    Squares.forEach(s => {
       const ms = this.chess.moves({ square: s, verbose: true });
       if (ms.length) dests.set(s, ms.map(m => m.to));
     });

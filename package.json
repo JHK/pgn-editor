@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@types/file-saver": "^2.0.4",
-    "chess.js": "^0.12.0",
+    "chess.js": "^0.13.2",
     "chessground": "^8.1.7",
     "file-saver": "^2.0.5",
     "lodash": "^4.17.21"
@@ -13,7 +13,7 @@
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@types/chai": "^4.3.1",
-    "@types/chess.js": "^0.11.2",
+    "@types/chess.js": "^0.13.0",
     "@types/lodash": "^4.14.176",
     "@types/mocha": "^9.1.1",
     "breakpoint-sass": "^2.7.1",
